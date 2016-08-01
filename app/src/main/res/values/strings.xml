@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">RxGpsService</string>
+    <string name="route_started">Route started</string>
+    <string name="permissions_required">Location permission is required</string>
+    <string name="location_settings_enabled">Location settings enabled</string>
+    <string name="location_settings_canceled">Location settings not enabled. Unable to retrieve your position</string>
+</resources>
