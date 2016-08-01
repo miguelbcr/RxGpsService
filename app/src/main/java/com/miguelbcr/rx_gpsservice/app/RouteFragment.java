@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.miguelbcr.rx_gps_service.lib.RxGpsService;
 import com.miguelbcr.rx_gps_service.lib.entities.LatLong;
 import com.miguelbcr.rx_gps_service.lib.entities.PermissionDeniedException;
@@ -41,6 +42,7 @@ public class RouteFragment extends Fragment {
     private CompositeSubscription subscriptions;
     private LatLong lastLatLong;
     private BitmapHelper bitmapHelper;
+    private RouteStatsRepository routeStatsRepository;
 
     @Nullable
     @Override
@@ -59,6 +61,13 @@ public class RouteFragment extends Fragment {
 
 //        Log.e("XXXXXXXXXXXXXXXXXX", "(10 horas, 1 waypoint/seg) obj LatLng    = " + new Gson().toJson(new LatLong(0.468464684684864, 1.654646846848, 212, true)).length() * 10 * 3600 / 1024 /1024 + " MB");
 //        Log.e("XXXXXXXXXXXXXXXXXX", "(10 horas, 1 waypoint/seg) obj Location = " + new Gson().toJson(new Location("dadf")).length() * 10 * 3600 / 1024 /1024 + " MB");
+//
+//        List<LatLong> latLongs = new ArrayList<>();
+//        for (int i = 0; i < 10 * 3600; i++) {
+//            latLongs.add(new LatLong(0.468464684684864, 1.654646846848, 212, true));
+//        }
+//        routeStatsRepository.update(new RouteStats(1, 2, 3, 4, 5, 6, null, latLongs, null));
+//        System.exit(0);
     }
 
     @Override
@@ -71,6 +80,7 @@ public class RouteFragment extends Fragment {
     private void init() {
         subscriptions = new CompositeSubscription();
         bitmapHelper = new BitmapHelper();
+        routeStatsRepository = new RouteStatsRepository(((BaseApp) getActivity().getApplication()).getReactiveCache());
 
         ib_play = (ImageView) getView().findViewById(R.id.ib_play);
         ib_stop = (ImageView) getView().findViewById(R.id.ib_stop);
@@ -228,6 +238,7 @@ public class RouteFragment extends Fragment {
                         public void call(RouteStats routeStats) {
                             Log.d(TAG, "Received data: " + routeStats.toString());
                             drawUserPath(routeStats);
+                            routeStatsRepository.update(routeStats);
                         }
                     }, new Action1<Throwable>() {
                         @Override

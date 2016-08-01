@@ -2,13 +2,12 @@ package com.miguelbcr.rx_gpsservice.app;
 
 import android.app.Application;
 import android.content.Context;
-import android.net.Uri;
-import android.os.Environment;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
-import org.acra.config.ACRAConfiguration;
-import org.acra.config.ConfigurationBuilder;
+
+import io.reactivecache.ReactiveCache;
+import io.victoralbertos.jolyglot.GsonSpeaker;
 
 /**
  * Created by miguel on 15/07/2016.
@@ -18,6 +17,8 @@ import org.acra.config.ConfigurationBuilder;
         mailTo = "youremail@mail.com"
 )
 public class BaseApp extends Application {
+    private ReactiveCache reactiveCache;
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -27,5 +28,15 @@ public class BaseApp extends Application {
 //                .build();
 //        ACRA.init(this, config);
         ACRA.init(this);
+        initReactiveCache();
+    }
+
+    private void initReactiveCache() {
+        reactiveCache = new ReactiveCache.Builder()
+                .using(getFilesDir(), new GsonSpeaker());
+    }
+
+    public ReactiveCache getReactiveCache() {
+        return reactiveCache;
     }
 }
