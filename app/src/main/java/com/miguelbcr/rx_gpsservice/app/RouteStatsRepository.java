@@ -18,8 +18,7 @@ class RouteStatsRepository {
     }
 
     Observable<RouteStats> get() {
-        RouteStats routeStats = null;
-        return Observable.just(routeStats).compose(cacheProvider.readWithLoader());
+        return Observable.<RouteStats>just(null).compose(cacheProvider.readWithLoader());
     }
 
     void update(RouteStats routeStats) {

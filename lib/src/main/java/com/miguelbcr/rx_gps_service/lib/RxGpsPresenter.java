@@ -44,13 +44,13 @@ class RxGpsPresenter {
     private final GetTripSpeedMin getTripSpeedMin;
     private final Utilities utilities;
     private final CompositeSubscription subscriptions;
+    private ConnectableObservable<RouteStats> connectableObservable;
     private List<LatLong> latLongs;
     private List<LatLongDetailed> latLongsDetailed;
     private long timeElapsed, lastTimeElapsed, timeElapsedBeingOnPause, timeLastLocation, distanceAccumulated, nextStageDistanceGoal;
     private boolean isMeaningWaypoint, stageDistanceReached, isNavigationModeAuto;
     private Location lastMeaningLocation, lastLocation;
     private float speed, speedAverage, speedMax, speedMin;
-    private ConnectableObservable<RouteStats> connectableObservable;
     private boolean isPlaying;
     private enum PERMISSIONS_STATE {DENIED, WAITING}
     private PERMISSIONS_STATE permissionState;

@@ -4,4 +4,7 @@
     <string name="permissions_required">Location permission is required</string>
     <string name="location_settings_enabled">Location settings enabled</string>
     <string name="location_settings_canceled">Location settings not enabled. Unable to retrieve your position</string>
+    <string name="time_elapsed">Time elapsed: %1$s</string>
+    <string name="distance_traveled">Distance traveled: %1$s</string>
+    <string name="route_details">Route details:</string>
 </resources>

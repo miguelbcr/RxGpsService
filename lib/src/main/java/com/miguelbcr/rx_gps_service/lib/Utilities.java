@@ -20,6 +20,8 @@ import android.location.Location;
 
 import com.miguelbcr.rx_gps_service.lib.entities.LatLong;
 
+import java.util.Locale;
+
 import rx.Observable;
 
 class Utilities {
@@ -37,5 +39,21 @@ class Utilities {
         locationB.setLongitude(toLatLong.getLongitude());
 
         return Observable.just(locationA.distanceTo(locationB));
+    }
+
+    String getTimeFormatted(long seconds) {
+        int hours = (int) (seconds / 3600);
+        int minutes = (int) (seconds - hours * 3600) / 60;
+        int secs = (int) (seconds - hours * 3600 - minutes * 60);
+
+        return String.format(Locale.UK, "%02d:%02d'%02d\"", hours, minutes, secs);
+    }
+
+    String getDistanceFormatted(long distance) {
+        if (distance < 1000) {
+            return String.valueOf(distance) + " m";
+        } else {
+            return String.format(Locale.UK, "%.2f", distance / 1000f).replace(".", ",") + " Km";
+        }
     }
 }

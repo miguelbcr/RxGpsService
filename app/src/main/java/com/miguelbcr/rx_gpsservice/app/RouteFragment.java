@@ -1,6 +1,5 @@
 package com.miguelbcr.rx_gpsservice.app;
 
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -17,13 +16,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.location.LocationRequest;
 import com.miguelbcr.rx_gps_service.lib.RxGpsService;
 import com.miguelbcr.rx_gps_service.lib.entities.LatLong;
 import com.miguelbcr.rx_gps_service.lib.entities.PermissionDeniedException;
 import com.miguelbcr.rx_gps_service.lib.entities.RouteStats;
+import com.miguelbcr.rx_gps_service.lib.entities.RxGpsServiceExtras;
 import com.miguelbcr.rx_gpsservice.R;
-import com.google.android.gms.location.LocationRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -175,20 +174,27 @@ public class RouteFragment extends Fragment {
                     .withDetailedWaypoints(false)
                     .startService(getContext(), new RxGpsService.Listener() {
                         @Override
-                        public Notification statusBarNotification(Context context) {
+                        public NotificationCompat.Builder notificationServiceStarted(Context context) {
                             int requestID = (int) System.currentTimeMillis();
                             Intent notificationIntent = new Intent(context, MainActivity.class);
                             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                             PendingIntent contentIntent = PendingIntent.getActivity(context, requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                            return new NotificationCompat.Builder(getActivity())
-                                    .setTicker(getString(R.string.app_name))
-                                    .setContentTitle(getString(R.string.app_name))
-                                    .setContentText(getString(R.string.route_started))
+                            Bundle extras = new Bundle();
+                            extras.putBoolean(RxGpsServiceExtras.SHOW_TIME, true);
+                            extras.putString(RxGpsServiceExtras.TIME_TEXT, getString(R.string.time_elapsed));
+                            extras.putBoolean(RxGpsServiceExtras.SHOW_DISTANCE, true);
+                            extras.putString(RxGpsServiceExtras.DISTANCE_TEXT, getString(R.string.distance_traveled));
+                            extras.putString(RxGpsServiceExtras.BIG_CONTENT_TITLE, getString(R.string.route_details));
+
+                            return new NotificationCompat.Builder(context)
+                                    .setTicker(context.getString(R.string.app_name))
+                                    .setContentTitle(context.getString(R.string.app_name))
+                                    .setContentText(context.getString(R.string.route_started))
                                     .setSmallIcon(R.drawable.ic_place)
-                                    .setLargeIcon(bitmapHelper.getBitmap(getContext(), R.drawable.ic_place))
+                                    .setLargeIcon(bitmapHelper.getBitmap(context, R.drawable.ic_place))
                                     .setContentIntent(contentIntent)
-                                    .build();
+                                    .setExtras(extras);
                         }
 
                         @Override
@@ -245,7 +251,7 @@ public class RouteFragment extends Fragment {
                         public void call(Throwable throwable) {
                             throwable.printStackTrace();
                             stopLocationService();
-                            subscriptions.clear();
+                            unsubscribe();
 
                             if (throwable instanceof PermissionDeniedException) {
                                 Toast.makeText(getContext(), R.string.permissions_required, Toast.LENGTH_SHORT).show();
@@ -258,16 +264,18 @@ public class RouteFragment extends Fragment {
     private void drawUserPath(RouteStats routeStats) {
         if (RxGpsService.isServiceStarted()) {
             List<LatLong> waypoints = routeStats.getLatLongs();
-            placeMapFragment.drawPathUser(waypoints);
             if (waypoints != null && !waypoints.isEmpty()) {
                 lastLatLong = routeStats.getLastLatLong();
                 placeMapFragment.updateUserLocation(routeStats, true);
             }
+            placeMapFragment.drawPathUser(waypoints);
         }
     }
 
     private void unsubscribe() {
-        if (subscriptions != null)
+        if (subscriptions != null) {
             subscriptions.unsubscribe();
+            subscriptions = null;
+        }
     }
 }

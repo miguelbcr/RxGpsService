@@ -17,12 +17,12 @@
 package com.miguelbcr.rx_gps_service.lib;
 
 import android.app.Activity;
-import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 
 import com.miguelbcr.rx_gps_service.lib.entities.RouteStats;
 
@@ -33,15 +33,108 @@ public class RxGpsService extends Service implements GpsServiceView {
     private static RxGpsService instance;
     private static Listener listener;
     private static GpsConfig gpsConfig;
+    private NotificationFactory notificationFactory;
     private RxGpsPresenter rxGpsPresenter;
     private Observable<RouteStats> oRouteStats;
     private boolean isChronoPlaying;
 
     public interface Listener {
-        Notification statusBarNotification(Context context);
+        NotificationCompat.Builder notificationServiceStarted(Context context);
         void onServiceAlreadyStarted();
         void onNavigationModeChanged(boolean isAuto);
     }
+
+    public static void stopService(Context context) {
+        context.stopService(new Intent(context, RxGpsService.class));
+    }
+
+    public static RxGpsService instance() {
+        return instance;
+    }
+
+    public static boolean isServiceStarted() {
+        return instance != null;
+    }
+
+    @Override
+    public void onCreate() {
+        rxGpsPresenter = new RxGpsPresenter(gpsConfig);
+        instance = this;
+        super.onCreate();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, final int startId) {
+        rxGpsPresenter.attachView(this);
+        notificationFactory = new NotificationFactory(this, listener);
+
+        startForeground(notificationFactory.getNotificationIdServiceStarted(),
+                notificationFactory.getNotificationServiceStarted(0, 0));
+
+        listener.onServiceAlreadyStarted();
+
+        return Service.START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RxGpsService.gpsConfig.setActivity(null);
+        RxGpsService.gpsConfig = null;
+        RxGpsService.listener =  null;
+        RxGpsService.instance = null;
+
+
+        notificationFactory.onDestroy();
+        rxGpsPresenter.disposeSubscriptions();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public void updatesRouteStats(Observable<RouteStats> oRouteStats) {
+        this.oRouteStats = oRouteStats;
+
+        if (rxGpsPresenter.isNavigationModeAuto()) {
+            if (isChronoPlaying != isChronoPlaying()) {
+                isChronoPlaying = isChronoPlaying();
+                listener.onNavigationModeChanged(true);
+            }
+        }
+    }
+
+    public Observable<RouteStats> updatesRouteStats() {
+        notificationFactory.connectChrono(oRouteStats);
+
+        return oRouteStats;
+    }
+
+    public void playChrono() {
+        rxGpsPresenter.playChrono();
+    }
+
+    public void stopChrono() {
+        rxGpsPresenter.stopChrono();
+    }
+
+    public boolean isChronoPlaying() {
+        return rxGpsPresenter.isChronoPlaying();
+    }
+
+    public void setNavigationModeAuto(boolean auto) {
+        isChronoPlaying = isChronoPlaying();
+        rxGpsPresenter.setNavigationModeAuto(auto);
+        listener.onNavigationModeChanged(auto);
+    }
+
+    public boolean isNavigationModeAuto() {
+        return rxGpsPresenter.isNavigationModeAuto();
+    }
+
 
     public static Builder builder(Activity activity) {
         return new Builder(activity);
@@ -161,89 +254,5 @@ public class RxGpsService extends Service implements GpsServiceView {
                 context.startService(new Intent(context, RxGpsService.class));
             }
         }
-    }
-
-    public static void stopService(Context context) {
-        context.stopService(new Intent(context, RxGpsService.class));
-    }
-
-    public static RxGpsService instance() {
-        return instance;
-    }
-
-    public static boolean isServiceStarted() {
-        return instance != null;
-    }
-
-    @Override
-    public void onCreate() {
-        rxGpsPresenter = new RxGpsPresenter(gpsConfig);
-        instance = this;
-        super.onCreate();
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, final int startId) {
-        rxGpsPresenter.attachView(this);
-
-        startForeground(1, listener.statusBarNotification(getApplicationContext()));
-        listener.onServiceAlreadyStarted();
-
-        return Service.START_STICKY;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        RxGpsService.gpsConfig.setActivity(null);
-        RxGpsService.gpsConfig = null;
-        RxGpsService.listener =  null;
-        RxGpsService.instance = null;
-
-        rxGpsPresenter.disposeSubscriptions();
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public void updatesRouteStats(Observable<RouteStats> oRouteStats) {
-        this.oRouteStats = oRouteStats;
-
-        if (rxGpsPresenter.isNavigationModeAuto()) {
-            if (isChronoPlaying != isChronoPlaying()) {
-                isChronoPlaying = isChronoPlaying();
-                listener.onNavigationModeChanged(true);
-            }
-        }
-    }
-
-    public Observable<RouteStats> updatesRouteStats() {
-        return oRouteStats;
-    }
-
-    public void playChrono() {
-        rxGpsPresenter.playChrono();
-    }
-
-    public void stopChrono() {
-        rxGpsPresenter.stopChrono();
-    }
-
-    public boolean isChronoPlaying() {
-        return rxGpsPresenter.isChronoPlaying();
-    }
-
-    public void setNavigationModeAuto(boolean auto) {
-        isChronoPlaying = isChronoPlaying();
-        rxGpsPresenter.setNavigationModeAuto(auto);
-        listener.onNavigationModeChanged(auto);
-    }
-
-    public boolean isNavigationModeAuto() {
-        return rxGpsPresenter.isNavigationModeAuto();
     }
 }

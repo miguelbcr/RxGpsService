@@ -201,26 +201,28 @@ public class PlaceMapFragment extends SupportMapFragment {
         startActivity(mapIntent);
     }
 
-    public void drawPathUser(List<LatLong> latLongs) {
+    public void drawPathUser(List<LatLong> waypoints) {
         if (googleMap == null) return;
+        if (polylineUser != null && polylineUser.getPoints().size() == waypoints.size()) return;
+
         polylineUser = removePath(polylineUser);
         polylineUserLastPath = removePath(polylineUserLastPath);
-        polylineUser = drawPath(latLongs, ContextCompat.getColor(getContext(), R.color.blue), 2f, polylineUser);
+        polylineUser = drawPath(waypoints, ContextCompat.getColor(getContext(), R.color.blue), 2f, polylineUser);
 
-        if (latLongs != null && !latLongs.isEmpty()) {
-            showCheckpoints(latLongs);
-            LatLong lastLatLong = latLongs.get(latLongs.size() - 1);
+        if (waypoints != null && !waypoints.isEmpty()) {
+            showCheckpoints(waypoints);
+            LatLong lastLatLong = waypoints.get(waypoints.size() - 1);
             LatLng latLng = new LatLng(lastLatLong.getLatitude(), lastLatLong.getLongitude());
             drawSegmentPathUser(latLng);
         }
     }
 
     public void updateUserLocation(RouteStats routeStats, boolean goToUserLocation) {
-        List<LatLong> waypoints = routeStats.getLatLongs();
-        LatLong lastLocation = waypoints.get(waypoints.size() - 1);
-        if (googleMap == null || isEmptyLatLong(lastLocation)) return;
+        LatLong currentLocation = routeStats.getLastLatLong();
 
-        LatLng latLng = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+        if (googleMap == null || isEmptyLatLong(currentLocation)) return;
+
+        LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         drawSegmentPathUser(latLng);
         if (markerUser != null) markerUser.remove();
         markerUser = addMark(latLng, "", getIconUser(), false);

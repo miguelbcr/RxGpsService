@@ -32,6 +32,7 @@ import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
+import rx.schedulers.Schedulers;
 
 public class RxLocation {
     private static final String TAG = "RxLocation";
@@ -57,8 +58,8 @@ public class RxLocation {
                 .setAlwaysShow(true)  //Reference: http://stackoverflow.com/questions/29824408/google-play-services-locationservices-api-new-option-never
                 .build();
 
-        return Observable.zip(grantPermissions.with(permissions()).builtObservable(),
-                locationProvider.checkLocationSettings(locationSettingsRequest),
+        return Observable.zip(grantPermissions.with(permissions()).builtObservable().subscribeOn(Schedulers.io()),
+                locationProvider.checkLocationSettings(locationSettingsRequest).subscribeOn(Schedulers.io()),
                 new Func2<Void, LocationSettingsResult, LocationSettingsResult>() {
                     @Override
                     public LocationSettingsResult call(Void aVoid, LocationSettingsResult locationSettingsResult) {

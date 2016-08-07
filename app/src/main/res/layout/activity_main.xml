@@ -6,8 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.miguelbcr.rx_gpsservice.app.MainActivity">
 
-    <fragment android:layout_width="match_parent"
+    <fragment
+        android:name="com.miguelbcr.rx_gpsservice.app.RouteFragment"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.miguelbcr.rx_gpsservice.app.RouteFragment"/>
+        tools:layout="@layout/route_fragment" />
 
 </RelativeLayout>
