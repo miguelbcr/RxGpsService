@@ -218,7 +218,7 @@ public class RouteFragment extends Fragment {
     private void resetRoutePath() {
         placeMapFragment.drawPathUser(new ArrayList<LatLong>());
         placeMapFragment.resetUserPosition(lastLatLong);
-        lastLatLong = new LatLong(0, 0);
+        lastLatLong = LatLong.create(0, 0);
     }
 
     private void stopListenForLocationUpdates() {
@@ -244,6 +244,7 @@ public class RouteFragment extends Fragment {
                         public void call(RouteStats routeStats) {
                             Log.d(TAG, "Received data: " + routeStats.toString());
                             drawUserPath(routeStats);
+                            // Saves our route in order to do not lose it in case of app crash
                             routeStatsRepository.update(routeStats);
                         }
                     }, new Action1<Throwable>() {
@@ -263,7 +264,7 @@ public class RouteFragment extends Fragment {
 
     private void drawUserPath(RouteStats routeStats) {
         if (RxGpsService.isServiceStarted()) {
-            List<LatLong> waypoints = routeStats.getLatLongs();
+            List<LatLong> waypoints = routeStats.latLongs();
             if (waypoints != null && !waypoints.isEmpty()) {
                 lastLatLong = routeStats.getLastLatLong();
                 placeMapFragment.updateUserLocation(routeStats, true);

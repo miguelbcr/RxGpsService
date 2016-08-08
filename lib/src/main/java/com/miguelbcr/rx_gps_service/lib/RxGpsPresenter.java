@@ -85,11 +85,11 @@ class RxGpsPresenter {
     }
 
     private LatLong getLatLong(Location location, boolean isCheckPoint) {
-        return new LatLong(location.getLatitude(), location.getLongitude(), (float) location.getAltitude(), isCheckPoint);
+        return LatLong.create(location.getLatitude(), location.getLongitude(), (float) location.getAltitude(), isCheckPoint);
     }
 
     private LatLongDetailed getLatLongDetailed(Location location, boolean isCheckPoint) {
-        return new LatLongDetailed(location, isCheckPoint);
+        return LatLongDetailed.create(location, isCheckPoint);
     }
 
     void attachView(GpsServiceView view) {
@@ -249,13 +249,13 @@ class RxGpsPresenter {
                             else RxGpsPresenter.this.stopChrono();
                         }
 
-                        return new RouteStats(timeElapsed,
+                        return RouteStats.create(timeElapsed,
                                 distanceAccumulated,
                                 speedMax,
                                 speedMin,
                                 speedAverage,
                                 speed,
-                                new LatLongDetailed(lastMeaningLocation, isStageDistanceGoalReached),
+                                LatLongDetailed.create(lastMeaningLocation, isStageDistanceGoalReached),
                                 latLongs, latLongsDetailed);
                     }
                 });
@@ -298,7 +298,7 @@ class RxGpsPresenter {
     private LatLong getLatLongBeforeLast() {
         if (gpsConfig.isDetailedWaypoints()) {
             LatLongDetailed latLongDetailed = latLongsDetailed.get(latLongsDetailed.size() - 2);
-            return new LatLong(latLongDetailed.getLocation().getLatitude(), latLongDetailed.getLocation().getLongitude());
+            return LatLong.create(latLongDetailed.location().getLatitude(), latLongDetailed.location().getLongitude());
         } else {
             return latLongs.get(latLongs.size() - 2);
         }
@@ -307,7 +307,7 @@ class RxGpsPresenter {
     private LatLong getLastLatLong() {
         if (gpsConfig.isDetailedWaypoints()) {
             LatLongDetailed latLongDetailed = latLongsDetailed.get(latLongsDetailed.size() - 1);
-            return new LatLong(latLongDetailed.getLocation().getLatitude(), latLongDetailed.getLocation().getLongitude());
+            return LatLong.create(latLongDetailed.location().getLatitude(), latLongDetailed.location().getLongitude());
         } else {
             return latLongs.get(latLongs.size() - 1);
         }

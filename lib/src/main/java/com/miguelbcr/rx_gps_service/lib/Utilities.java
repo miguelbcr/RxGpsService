@@ -31,12 +31,12 @@ class Utilities {
 
     Observable<Float> getDistanceFromTo(LatLong fromLatLong, LatLong toLatLong) {
         Location locationA = new Location("pointA");
-        locationA.setLatitude(fromLatLong.getLatitude());
-        locationA.setLongitude(fromLatLong.getLongitude());
+        locationA.setLatitude(fromLatLong.latitude());
+        locationA.setLongitude(fromLatLong.longitude());
 
         Location locationB = new Location("pointB");
-        locationB.setLatitude(toLatLong.getLatitude());
-        locationB.setLongitude(toLatLong.getLongitude());
+        locationB.setLatitude(toLatLong.latitude());
+        locationB.setLongitude(toLatLong.longitude());
 
         return Observable.just(locationA.distanceTo(locationB));
     }

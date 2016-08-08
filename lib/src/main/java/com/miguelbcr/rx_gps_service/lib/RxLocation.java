@@ -36,7 +36,7 @@ import rx.schedulers.Schedulers;
 
 public class RxLocation {
     private static final String TAG = "RxLocation";
-    public static final int REQUEST_CHECK_LOCATION_SETTINGS = 654;
+    public static final int REQUEST_CHECK_LOCATION_SETTINGS = 65456;
     private final GrantPermissions grantPermissions;
     private GpsConfig gpsConfig;
 

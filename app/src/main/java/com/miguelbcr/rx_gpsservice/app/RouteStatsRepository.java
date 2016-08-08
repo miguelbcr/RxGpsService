@@ -18,12 +18,18 @@ class RouteStatsRepository {
     }
 
     Observable<RouteStats> get() {
-        return Observable.<RouteStats>just(null).compose(cacheProvider.readWithLoader());
+        return cacheProvider.readNullable();
     }
 
     void update(RouteStats routeStats) {
         Observable.just(routeStats)
                 .compose(cacheProvider.replace())
+                .onErrorResumeNext(new Func1<Throwable, Observable<? extends RouteStats>>() {
+                    @Override
+                    public Observable<? extends RouteStats> call(Throwable throwable) {
+                        return null;
+                    }
+                })
                 .map(new Func1<RouteStats, Void>() {
                     @Override
                     public Void call(RouteStats routeStats) {

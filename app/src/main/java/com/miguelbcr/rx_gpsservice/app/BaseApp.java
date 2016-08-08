@@ -1,7 +1,6 @@
 package com.miguelbcr.rx_gpsservice.app;
 
 import android.app.Application;
-import android.content.Context;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
@@ -20,13 +19,9 @@ public class BaseApp extends Application {
     private ReactiveCache reactiveCache;
 
     @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
+    public void onCreate() {
+        super.onCreate();
 
-//        final ACRAConfiguration config = new ConfigurationBuilder(this)
-//                .setMailTo("youremail@mail.com")
-//                .build();
-//        ACRA.init(this, config);
         ACRA.init(this);
         initReactiveCache();
     }

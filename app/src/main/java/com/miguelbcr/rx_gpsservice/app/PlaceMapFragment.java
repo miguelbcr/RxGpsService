@@ -13,9 +13,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.miguelbcr.rx_gps_service.lib.entities.LatLong;
-import com.miguelbcr.rx_gps_service.lib.entities.RouteStats;
-import com.miguelbcr.rx_gpsservice.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,6 +24,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.miguelbcr.rx_gps_service.lib.entities.LatLong;
+import com.miguelbcr.rx_gps_service.lib.entities.RouteStats;
+import com.miguelbcr.rx_gpsservice.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -153,9 +153,9 @@ public class PlaceMapFragment extends SupportMapFragment {
             Route route = (Route) place;
             if (route.getId() == 0)  return; // Creating new route. Route is empty
 
-            LatLng latLng = new LatLng(route.getLatLong().getLatitude(), route.getLatLong().getLongitude());
+            LatLng latLng = new LatLng(route.getLatLong().latitude(), route.getLatLong().longitude());
             markersMap.put(addMark(latLng, route.getName(), getIconRoute(), route.getId() == idPlaceToGo), route);
-            latLng = new LatLng(route.getLatLongEnd().getLatitude(), route.getLatLongEnd().getLongitude());
+            latLng = new LatLng(route.getLatLongEnd().latitude(), route.getLatLongEnd().longitude());
             markersMap.put(addMark(latLng, route.getName(), getIconRoute(), false), route);
             polylineRoute = removePath(polylineRoute);
             polylineRoute = drawPath(route.getPath(), ContextCompat.getColor(getContext(), R.color.blue), 1f, polylineRoute);
@@ -212,7 +212,7 @@ public class PlaceMapFragment extends SupportMapFragment {
         if (waypoints != null && !waypoints.isEmpty()) {
             showCheckpoints(waypoints);
             LatLong lastLatLong = waypoints.get(waypoints.size() - 1);
-            LatLng latLng = new LatLng(lastLatLong.getLatitude(), lastLatLong.getLongitude());
+            LatLng latLng = new LatLng(lastLatLong.latitude(), lastLatLong.longitude());
             drawSegmentPathUser(latLng);
         }
     }
@@ -222,7 +222,7 @@ public class PlaceMapFragment extends SupportMapFragment {
 
         if (googleMap == null || isEmptyLatLong(currentLocation)) return;
 
-        LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        LatLng latLng = new LatLng(currentLocation.latitude(), currentLocation.longitude());
         drawSegmentPathUser(latLng);
         if (markerUser != null) markerUser.remove();
         markerUser = addMark(latLng, "", getIconUser(), false);
@@ -235,16 +235,16 @@ public class PlaceMapFragment extends SupportMapFragment {
     public void resetUserPosition(LatLong latLong) {
         if (googleMap == null || isEmptyLatLong(latLong)) return;
 
-        LatLng latLng = new LatLng(latLong.getLatitude(), latLong.getLongitude());
+        LatLng latLng = new LatLng(latLong.latitude(), latLong.longitude());
         if (markerUser != null) markerUser.remove();
         markerUser = addMark(latLng, "", getIconUser(), false);
         markerUser.hideInfoWindow();
-        markersMap.put(markerUser, new RouteStats(0, 0, 0f, 0f, 0f, 0f, null, null, null));
+        markersMap.put(markerUser, RouteStats.create(0, 0, 0f, 0f, 0f, 0f, null, null, null));
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
     private boolean isEmptyLatLong(LatLong latLong) {
-        return latLong == null || (latLong.getLatitude() == 0 && latLong.getLongitude() == 0);
+        return latLong == null || (latLong.latitude() == 0 && latLong.longitude() == 0);
     }
 
     private void showCheckpoints(List<LatLong> latLongs) {
@@ -300,7 +300,7 @@ public class PlaceMapFragment extends SupportMapFragment {
     }
 
     private Marker addMarkerPoi(final Place place, final BitmapDescriptor bitmapDescriptor, final int idPlaceToGo) {
-        LatLng latLng = new LatLng(place.getLatLong().getLatitude(), place.getLatLong().getLongitude());
+        LatLng latLng = new LatLng(place.getLatLong().latitude(), place.getLatLong().longitude());
         return addMark(latLng, place.getName(), bitmapDescriptor, place.getId() == idPlaceToGo);
     }
 
@@ -362,7 +362,7 @@ public class PlaceMapFragment extends SupportMapFragment {
             polyLineOptions.zIndex(zIndex);
 
             for (LatLong latLong : latLongs) {
-                polyLineOptions.add(new LatLng(latLong.getLatitude(), latLong.getLongitude()));
+                polyLineOptions.add(new LatLng(latLong.latitude(), latLong.longitude()));
             }
 
             if (polyline != null) polyline.remove();
@@ -426,21 +426,17 @@ public class PlaceMapFragment extends SupportMapFragment {
     }
 
     private String getInfoWindowText(RouteStats routeStats) {
-        return getTimeFormatted(routeStats.getTime()) + "\n" +
-                getDistanceFormatted(routeStats.getDistance()) + "\n" +
-                getSpeedFormatted(routeStats.getSpeed(), true) + "\n" +
-                routeStats.getLatLongs().size() + " waypoints";
+        return getTimeFormatted(routeStats.time()) + "\n" +
+                getDistanceFormatted(routeStats.distance()) + "\n" +
+                getSpeedFormatted(routeStats.speed(), true) + "\n" +
+                routeStats.latLongs().size() + " waypoints";
     }
 
     private String getInfoWindowText(Place place) {
-        return "Alt: " + getDistanceFormatted((long) place.getLatLong().getAltitude());
+        return "Alt: " + getDistanceFormatted((long) place.getLatLong().altitude());
     }
 
     private String getDistanceFormatted(long distance) {
-        if (distance == 0) {
-            return "0 m";
-        }
-
         if (distance < 1000) {
             return String.valueOf(distance) + " m";
         }

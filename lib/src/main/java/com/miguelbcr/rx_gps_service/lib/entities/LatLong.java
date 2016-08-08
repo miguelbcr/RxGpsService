@@ -16,39 +16,20 @@
 
 package com.miguelbcr.rx_gps_service.lib.entities;
 
-public class LatLong {
-    private final double latitude;
-    private final double longitude;
-    private final float altitude;
-    private final boolean isCheckPoint;
+import com.google.auto.value.AutoValue;
 
-    public LatLong(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.altitude = 0;
-        this.isCheckPoint = false;
+@AutoValue
+public abstract class LatLong {
+    public abstract double latitude();
+    public abstract double longitude();
+    public abstract float altitude();
+    public abstract boolean isCheckPoint();
+
+    public static LatLong create(double latitude, double longitude) {
+        return create(latitude, longitude, 0, false);
     }
 
-    public LatLong(double latitude, double longitude, float altitude, boolean isCheckPoint) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.altitude = altitude;
-        this.isCheckPoint = isCheckPoint;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public float getAltitude() {
-        return altitude;
-    }
-
-    public boolean isCheckPoint() {
-        return isCheckPoint;
+    public static LatLong create(double latitude, double longitude, float altitude, boolean isCheckPoint) {
+        return new AutoValue_LatLong(latitude, longitude, altitude, isCheckPoint);
     }
 }

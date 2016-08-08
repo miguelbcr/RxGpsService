@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 24
@@ -25,13 +26,14 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha4'
+    provided "com.google.auto.value:auto-value:1.2"
+    apt "com.google.auto.value:auto-value:1.2"
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'ch.acra:acra:4.8.5'
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.8'
     compile 'com.github.VictorAlbertos:ReactiveCache:0.0.2'
     compile 'com.github.VictorAlbertos.Jolyglot:gson:0.0.3'
-
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

@@ -32,7 +32,11 @@ public abstract class RxGpsServiceExtras {
     /**
      * Custom id for notification. Default 1.
      */
-    public static final String NOTIFICATION_ID_SERVICE_STARTED = "extrasNotificationIdServiceStarted";
+    public static final String NOTIFICATION_ID_SERVICE_STARTED = "notificationIdServiceStarted";
+    /**
+     * Custom group name for notification expanded view. Default "ServiceStartedGroup".
+     */
+    public static final String NOTIFICATION_GROUP_SERVICE_STARTED = "notificationGroupServiceStarted";
     /**
      * Shows the content title for the expanded view. Default empty.
      */
@@ -61,28 +65,34 @@ public abstract class RxGpsServiceExtras {
     public static final String DISTANCE_TEXT = "extrasDistanceText";
 
     public abstract int notificationIdServiceStarted();
+    public abstract String notificationGroupServiceStarted();
     public abstract String bigContentTitle();
     public abstract boolean showTime();
     public abstract String timeText();
     public abstract boolean showDistance();
     public abstract String distanceText();
 
-    private static RxGpsServiceExtras create(int notificationIdServiceStarted, String bigContentTitle,
+    private static RxGpsServiceExtras create(int notificationIdServiceStarted,
+                                             String notificationGroupServiceStarted,
+                                             String bigContentTitle,
                                              boolean showTime, String timeText,
                                              boolean showDistance, String distanceText) {
-        return new AutoValue_RxGpsServiceExtras(notificationIdServiceStarted, bigContentTitle,
+        return new AutoValue_RxGpsServiceExtras(notificationIdServiceStarted,
+                notificationGroupServiceStarted, bigContentTitle,
                 showTime, timeText, showDistance, distanceText);
     }
 
     public static RxGpsServiceExtras createFromBundle(Bundle extras) {
         int notificationIdServiceStarted = extras.getInt(NOTIFICATION_ID_SERVICE_STARTED, 1);
+        String notificationGroupServiceStarted = extras.getString(NOTIFICATION_GROUP_SERVICE_STARTED, "ServiceStartedGroup");
         String bigContentTitle = extras.getString(BIG_CONTENT_TITLE);
         boolean showTime = extras.getBoolean(SHOW_TIME, false);
         String timeText = extras.getString(TIME_TEXT);
         boolean showDistance = extras.getBoolean(SHOW_DISTANCE, false);
         String distanceText = extras.getString(DISTANCE_TEXT);
 
-        return RxGpsServiceExtras.create(notificationIdServiceStarted, bigContentTitle,
+        return RxGpsServiceExtras.create(notificationIdServiceStarted,
+                notificationGroupServiceStarted, bigContentTitle,
                 showTime, timeText, showDistance, distanceText);
     }
 }

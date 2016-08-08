@@ -28,7 +28,6 @@ import com.miguelbcr.rx_gps_service.lib.entities.RouteStats;
 
 import rx.Observable;
 
-
 public class RxGpsService extends Service implements GpsServiceView {
     private static RxGpsService instance;
     private static Listener listener;
@@ -108,7 +107,7 @@ public class RxGpsService extends Service implements GpsServiceView {
     }
 
     public Observable<RouteStats> updatesRouteStats() {
-        notificationFactory.connectChrono(oRouteStats);
+        notificationFactory.listenForUpdates(oRouteStats);
 
         return oRouteStats;
     }

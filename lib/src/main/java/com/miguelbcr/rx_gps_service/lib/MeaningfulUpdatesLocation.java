@@ -48,8 +48,8 @@ class MeaningfulUpdatesLocation {
         if (previousLocation == null)
             previousLocation = new Location("previousLocation");
 
-        LatLong previousLatLng = new LatLong(previousLocation.getLatitude(), previousLocation.getLongitude());
-        LatLong currentLatLng = new LatLong(currentLocation.getLatitude(), currentLocation.getLongitude());
+        LatLong previousLatLng = LatLong.create(previousLocation.getLatitude(), previousLocation.getLongitude());
+        LatLong currentLatLng = LatLong.create(currentLocation.getLatitude(), currentLocation.getLongitude());
 
         return utilities.getDistanceFromTo(previousLatLng, currentLatLng)
                 .map(new Func1<Float, Boolean>() {

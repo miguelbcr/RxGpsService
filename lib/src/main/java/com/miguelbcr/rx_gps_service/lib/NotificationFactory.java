@@ -31,7 +31,7 @@ import rx.Subscription;
 import rx.functions.Action1;
 import rx.observables.ConnectableObservable;
 
-public class NotificationFactory {
+class NotificationFactory {
     private Context context;
     private RxGpsService.Listener listener;
     private Utilities utilities;
@@ -40,7 +40,7 @@ public class NotificationFactory {
     private NotificationCompat.Builder builderServiceStarted;
     private NotificationManagerCompat notificationManager;
 
-    public NotificationFactory(Context context, RxGpsService.Listener listener) {
+    NotificationFactory(Context context, RxGpsService.Listener listener) {
         this.context = context;
         this.listener = listener;
         utilities = new Utilities();
@@ -88,9 +88,8 @@ public class NotificationFactory {
             builderServiceStarted.setAutoCancel(false);
             builderServiceStarted.setStyle(inboxStyle);
             builderServiceStarted.setGroupSummary(true);
-            builderServiceStarted.setGroup("ServiceStartedGroup");
+            builderServiceStarted.setGroup(rxGpsServiceExtras.notificationGroupServiceStarted());
         }
-
 
         return builderServiceStarted.build();
     }
@@ -110,7 +109,7 @@ public class NotificationFactory {
         return rxGpsServiceExtras.notificationIdServiceStarted();
     }
 
-    void connectChrono(Observable<RouteStats> oRouteStats) {
+    void listenForUpdates(Observable<RouteStats> oRouteStats) {
         if (rxGpsServiceExtras.showTime()) {
             if (connectableObservable == null) {
                 connectableObservable = oRouteStats.publish();
@@ -121,7 +120,7 @@ public class NotificationFactory {
                 @Override
                 public void call(RouteStats routeStats) {
                     notificationManager.notify(rxGpsServiceExtras.notificationIdServiceStarted(),
-                            getNotificationServiceStarted(routeStats.getTime(), routeStats.getDistance()));
+                            getNotificationServiceStarted(routeStats.time(), routeStats.distance()));
                 }
             });
         }
