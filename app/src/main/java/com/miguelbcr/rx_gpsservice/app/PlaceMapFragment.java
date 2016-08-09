@@ -3,6 +3,7 @@ package com.miguelbcr.rx_gpsservice.app;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.miguelbcr.rx_gps_service.lib.entities.LatLong;
+import com.miguelbcr.rx_gps_service.lib.entities.LatLongDetailed;
 import com.miguelbcr.rx_gps_service.lib.entities.RouteStats;
 import com.miguelbcr.rx_gpsservice.R;
 import com.squareup.picasso.Picasso;
@@ -239,7 +241,9 @@ public class PlaceMapFragment extends SupportMapFragment {
         if (markerUser != null) markerUser.remove();
         markerUser = addMark(latLng, "", getIconUser(), false);
         markerUser.hideInfoWindow();
-        markersMap.put(markerUser, RouteStats.create(0, 0, 0f, 0f, 0f, 0f, null, null, null));
+        markersMap.put(markerUser, RouteStats.create(0, 0, 0f, 0f, 0f, 0f,
+                LatLongDetailed.create(new Location("empty")),
+                new ArrayList<LatLong>(), new ArrayList<LatLongDetailed>()));
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
