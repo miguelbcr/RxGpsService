@@ -1,6 +1,6 @@
 package com.miguelbcr.rx_gpsservice.app;
 
-import com.miguelbcr.rx_gps_service.lib.entities.RouteStats;
+import com.miguelbcr.io.rx_gps_service.lib.entities.RouteStats;
 
 import io.reactivecache.Provider;
 import io.reactivecache.ReactiveCache;

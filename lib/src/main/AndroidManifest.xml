@@ -5,7 +5,7 @@
         android:supportsRtl="true">
 
         <service
-            android:name="com.miguelbcr.rx_gps_service.lib.RxGpsService"
+            android:name="com.miguelbcr.io.rx_gps_service.lib.RxGpsService"
             android:exported="false" />
 
     </application>

@@ -14,38 +14,23 @@
  * limitations under the License.
  */
 
-package com.miguelbcr.rx_gps_service.lib;
+package com.miguelbcr.io.rx_gps_service.lib;
 
 import rx.Observable;
 
-class GetTripSpeed {
-    private float speed;
-    private long time, distance;
-    private float discardSpeedsAbove;
+class GetTripSpeedMax {
+    private float speedMax;
+    private float lastSpeed;
 
-    GetTripSpeed() {
+    GetTripSpeedMax() {
     }
 
-    void setParams(long distance, long time, float discardSpeedsAbove) {
-        this.distance = distance;
-        this.time = time;
-        this.discardSpeedsAbove = discardSpeedsAbove;
-    }
-
-    long getLastTimeElapsed() {
-        return time;
-    }
-
-    float getSpeed() {
-        return speed;
+    void setLastSpeed(float lastSpeed) {
+        this.lastSpeed = lastSpeed;
     }
 
     Observable<Float> builtObservable() {
-        speed = time == 0 ? 0 : 1f * distance / time;
-
-        if (discardSpeedsAbove > 0 && speed > discardSpeedsAbove)
-            speed = 0;
-
-        return Observable.just(speed);
+        speedMax = lastSpeed > speedMax ? lastSpeed : speedMax;
+        return Observable.just(speedMax);
     }
 }

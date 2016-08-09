@@ -17,11 +17,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
-import com.miguelbcr.rx_gps_service.lib.RxGpsService;
-import com.miguelbcr.rx_gps_service.lib.entities.LatLong;
-import com.miguelbcr.rx_gps_service.lib.entities.PermissionDeniedException;
-import com.miguelbcr.rx_gps_service.lib.entities.RouteStats;
-import com.miguelbcr.rx_gps_service.lib.entities.RxGpsServiceExtras;
+import com.miguelbcr.io.rx_gps_service.lib.RxGpsService;
+import com.miguelbcr.io.rx_gps_service.lib.entities.LatLong;
+import com.miguelbcr.io.rx_gps_service.lib.entities.PermissionDeniedException;
+import com.miguelbcr.io.rx_gps_service.lib.entities.RouteStats;
+import com.miguelbcr.io.rx_gps_service.lib.entities.RxGpsServiceExtras;
 import com.miguelbcr.rx_gpsservice.R;
 
 import java.util.ArrayList;

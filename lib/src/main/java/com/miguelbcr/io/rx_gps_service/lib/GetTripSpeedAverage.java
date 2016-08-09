@@ -14,13 +14,24 @@
  * limitations under the License.
  */
 
-package com.miguelbcr.rx_gps_service.lib;
-
-
-import com.miguelbcr.rx_gps_service.lib.entities.RouteStats;
+package com.miguelbcr.io.rx_gps_service.lib;
 
 import rx.Observable;
 
-interface RxGpsServiceView {
-    void updatesRouteStats(Observable<RouteStats> oRouteStats);
+class GetTripSpeedAverage {
+    private float speed;
+    private long distance, time;
+
+    GetTripSpeedAverage() {
+    }
+
+    void setParams(long distance, long time) {
+        this.distance = distance;
+        this.time = time;
+    }
+
+    Observable<Float> builtObservable() {
+        speed = time == 0 ? 0 : 1f * distance / time;
+        return Observable.just(speed);
+    }
 }

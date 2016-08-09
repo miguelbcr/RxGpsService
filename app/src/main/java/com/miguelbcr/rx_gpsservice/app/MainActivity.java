@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.miguelbcr.rx_gps_service.lib.RxLocation;
+import com.miguelbcr.io.rx_gps_service.lib.RxLocation;
 import com.miguelbcr.rx_gpsservice.R;
 
 public class MainActivity extends AppCompatActivity {

@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.miguelbcr.rx_gps_service.lib;
+package com.miguelbcr.io.rx_gps_service.lib;
 
 import android.location.Location;
 
-import com.miguelbcr.rx_gps_service.lib.entities.LatLong;
+import com.miguelbcr.io.rx_gps_service.lib.entities.LatLong;
 
 import java.util.Locale;
 

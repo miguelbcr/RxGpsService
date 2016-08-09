@@ -1,6 +1,6 @@
 package com.miguelbcr.rx_gpsservice.app;
 
-import com.miguelbcr.rx_gps_service.lib.entities.LatLong;
+import com.miguelbcr.io.rx_gps_service.lib.entities.LatLong;
 
 import java.util.List;
 

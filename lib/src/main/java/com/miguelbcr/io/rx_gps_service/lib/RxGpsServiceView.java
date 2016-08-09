@@ -14,22 +14,13 @@
  * limitations under the License.
  */
 
-package com.miguelbcr.rx_gps_service.lib.entities;
+package com.miguelbcr.io.rx_gps_service.lib;
 
-import android.location.Location;
 
-import com.google.auto.value.AutoValue;
+import com.miguelbcr.io.rx_gps_service.lib.entities.RouteStats;
 
-@AutoValue
-public abstract class LatLongDetailed {
-    public abstract Location location();
-    public abstract boolean isCheckPoint();
+import rx.Observable;
 
-    public static LatLongDetailed create(Location location) {
-        return create(location, false);
-    }
-
-    public static LatLongDetailed create(Location location, boolean isCheckPoint) {
-        return new AutoValue_LatLongDetailed(location, isCheckPoint);
-    }
+interface RxGpsServiceView {
+    void updatesRouteStats(Observable<RouteStats> oRouteStats);
 }

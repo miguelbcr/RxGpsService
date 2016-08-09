@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-package com.miguelbcr.rx_gps_service.lib.entities;
+package com.miguelbcr.io.rx_gps_service.lib.entities;
 
-import com.google.auto.value.AutoValue;
+public class PermissionDeniedException extends RuntimeException {
 
-@AutoValue
-public abstract class LatLong {
-    public abstract double latitude();
-    public abstract double longitude();
-    public abstract float altitude();
-    public abstract boolean isCheckPoint();
-
-    public static LatLong create(double latitude, double longitude) {
-        return create(latitude, longitude, 0, false);
+    public PermissionDeniedException() {
+        this("No permission granted");
     }
 
-    public static LatLong create(double latitude, double longitude, float altitude, boolean isCheckPoint) {
-        return new AutoValue_LatLong(latitude, longitude, altitude, isCheckPoint);
+    public PermissionDeniedException(String detailMessage) {
+        super(detailMessage);
     }
 }

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.miguelbcr.rx_gps_service.lib;
+package com.miguelbcr.io.rx_gps_service.lib;
 
 import android.location.Location;
 import android.util.Log;
 
-import com.miguelbcr.rx_gps_service.lib.entities.LatLong;
-import com.miguelbcr.rx_gps_service.lib.entities.LatLongDetailed;
-import com.miguelbcr.rx_gps_service.lib.entities.RouteStats;
+import com.miguelbcr.io.rx_gps_service.lib.entities.LatLong;
+import com.miguelbcr.io.rx_gps_service.lib.entities.LatLongDetailed;
+import com.miguelbcr.io.rx_gps_service.lib.entities.RouteStats;
 
 import java.util.ArrayList;
 import java.util.List;

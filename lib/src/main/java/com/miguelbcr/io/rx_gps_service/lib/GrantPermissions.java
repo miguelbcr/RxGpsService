@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.miguelbcr.rx_gps_service.lib;
+package com.miguelbcr.io.rx_gps_service.lib;
 
 
 import android.app.Activity;
 
-import com.miguelbcr.rx_gps_service.lib.entities.PermissionDeniedException;
+import com.miguelbcr.io.rx_gps_service.lib.entities.PermissionDeniedException;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import rx.Observable;

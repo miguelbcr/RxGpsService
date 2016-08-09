@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.miguelbcr.rx_gps_service.lib;
+package com.miguelbcr.io.rx_gps_service.lib;
 
 import rx.Observable;
 

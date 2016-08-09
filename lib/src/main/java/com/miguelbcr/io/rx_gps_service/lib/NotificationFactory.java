@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.miguelbcr.rx_gps_service.lib;
+package com.miguelbcr.io.rx_gps_service.lib;
 
 import android.app.Notification;
 import android.content.Context;
@@ -23,8 +23,8 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
 
-import com.miguelbcr.rx_gps_service.lib.entities.RouteStats;
-import com.miguelbcr.rx_gps_service.lib.entities.RxGpsServiceExtras;
+import com.miguelbcr.io.rx_gps_service.lib.entities.RouteStats;
+import com.miguelbcr.io.rx_gps_service.lib.entities.RxGpsServiceExtras;
 
 import rx.Observable;
 import rx.Subscription;

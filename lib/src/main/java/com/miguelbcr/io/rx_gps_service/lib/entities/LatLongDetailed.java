@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package com.miguelbcr.rx_gps_service.lib.entities;
+package com.miguelbcr.io.rx_gps_service.lib.entities;
 
-public class PermissionDeniedException extends RuntimeException {
+import android.location.Location;
 
-    public PermissionDeniedException() {
-        this("No permission granted");
+import com.google.auto.value.AutoValue;
+
+@AutoValue
+public abstract class LatLongDetailed {
+    public abstract Location location();
+    public abstract boolean isCheckPoint();
+
+    public static LatLongDetailed create(Location location) {
+        return create(location, false);
     }
 
-    public PermissionDeniedException(String detailMessage) {
-        super(detailMessage);
+    public static LatLongDetailed create(Location location, boolean isCheckPoint) {
+        return new AutoValue_LatLongDetailed(location, isCheckPoint);
     }
 }

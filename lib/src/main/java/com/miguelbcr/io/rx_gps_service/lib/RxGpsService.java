@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.miguelbcr.rx_gps_service.lib;
+package com.miguelbcr.io.rx_gps_service.lib;
 
 import android.app.Activity;
 import android.app.Service;
@@ -24,7 +24,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
-import com.miguelbcr.rx_gps_service.lib.entities.RouteStats;
+import com.miguelbcr.io.rx_gps_service.lib.entities.RouteStats;
 
 import rx.Observable;
 
@@ -41,7 +41,7 @@ public class RxGpsService extends Service implements RxGpsServiceView {
         /**
          * A {@link android.support.v4.app.NotificationCompat.Builder} is required in order to
          * notify the service is running.<br/><br/>
-         * You can use {@link com.miguelbcr.rx_gps_service.lib.entities.RxGpsServiceExtras} to show
+         * You can use {@link com.miguelbcr.io.rx_gps_service.lib.entities.RxGpsServiceExtras} to show
          * additional info on the notification.
          *
          * @param context Use this context within this method body if any context is requiered.
