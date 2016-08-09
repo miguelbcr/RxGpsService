@@ -43,7 +43,7 @@ public abstract class RxGpsServiceExtras {
     public static final String BIG_CONTENT_TITLE = "extrasBigContentTitle";
     /**
      * Shows chrono time in format HH:mm:ss on a expanded layout. Default false.<br/><br/>
-     * See {@link #TIME_TEXT}
+     * See {@link #TEXT_TIME}
      */
     public static final String SHOW_TIME = "extrasShowTime";
     /**
@@ -51,10 +51,10 @@ public abstract class RxGpsServiceExtras {
      * replacing %1$s by the chrono time. Default empty.<br/><br/>
      * See {@link #SHOW_TIME}
      */
-    public static final String TIME_TEXT = "extrasTimeText";
+    public static final String TEXT_TIME = "extrasTextTime";
     /**
      * Shows distance traveled in format m or km on a expanded view. Default false.<br/><br/>
-     * See {@link #DISTANCE_TEXT}
+     * See {@link #TEXT_DISTANCE}
      */
     public static final String SHOW_DISTANCE = "extrasShowDistance";
     /**
@@ -62,7 +62,7 @@ public abstract class RxGpsServiceExtras {
      * replacing %1$s by the distance traveled. Default empty.<br/><br/>
      * See {@link #SHOW_DISTANCE}
      */
-    public static final String DISTANCE_TEXT = "extrasDistanceText";
+    public static final String TEXT_DISTANCE = "extrasTextDistance";
 
     public abstract int notificationIdServiceStarted();
     public abstract String notificationGroupServiceStarted();
@@ -87,9 +87,9 @@ public abstract class RxGpsServiceExtras {
         String notificationGroupServiceStarted = extras.getString(NOTIFICATION_GROUP_SERVICE_STARTED, "ServiceStartedGroup");
         String bigContentTitle = extras.getString(BIG_CONTENT_TITLE, "");
         boolean showTime = extras.getBoolean(SHOW_TIME, false);
-        String timeText = extras.getString(TIME_TEXT, "");
+        String timeText = extras.getString(TEXT_TIME, "");
         boolean showDistance = extras.getBoolean(SHOW_DISTANCE, false);
-        String distanceText = extras.getString(DISTANCE_TEXT, "");
+        String distanceText = extras.getString(TEXT_DISTANCE, "");
 
         return RxGpsServiceExtras.create(notificationIdServiceStarted,
                 notificationGroupServiceStarted, bigContentTitle,

@@ -183,9 +183,9 @@ public class RouteFragment extends Fragment {
 
                             Bundle extras = new Bundle();
                             extras.putBoolean(RxGpsServiceExtras.SHOW_TIME, true);
-                            extras.putString(RxGpsServiceExtras.TIME_TEXT, getString(R.string.time_elapsed));
+                            extras.putString(RxGpsServiceExtras.TEXT_TIME, getString(R.string.time_elapsed));
                             extras.putBoolean(RxGpsServiceExtras.SHOW_DISTANCE, true);
-                            extras.putString(RxGpsServiceExtras.DISTANCE_TEXT, getString(R.string.distance_traveled));
+                            extras.putString(RxGpsServiceExtras.TEXT_DISTANCE, getString(R.string.distance_traveled));
                             extras.putString(RxGpsServiceExtras.BIG_CONTENT_TITLE, getString(R.string.route_details));
 
                             return new NotificationCompat.Builder(context)
