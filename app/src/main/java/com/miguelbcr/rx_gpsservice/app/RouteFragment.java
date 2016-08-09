@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,8 +18,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
+import com.google.gson.Gson;
 import com.miguelbcr.io.rx_gps_service.lib.RxGpsService;
 import com.miguelbcr.io.rx_gps_service.lib.entities.LatLong;
+import com.miguelbcr.io.rx_gps_service.lib.entities.LatLongDetailed;
 import com.miguelbcr.io.rx_gps_service.lib.entities.PermissionDeniedException;
 import com.miguelbcr.io.rx_gps_service.lib.entities.RouteStats;
 import com.miguelbcr.io.rx_gps_service.lib.entities.RxGpsServiceExtras;
@@ -46,32 +49,19 @@ public class RouteFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.e("RouteFragment", "onCreateView()");
         return inflater.inflate(R.layout.route_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.e("RouteFragment", "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
         placeMapFragment = PlaceMapFragment.getInstance();
         replaceFragment(R.id.map_fragment, placeMapFragment);
         init();
-
-//        Log.e("XXXXXXXXXXXXXXXXXX", "(10 horas, 1 waypoint/seg) obj LatLng    = " + new Gson().toJson(new LatLong(0.468464684684864, 1.654646846848, 212, true)).length() * 10 * 3600 / 1024 /1024 + " MB");
-//        Log.e("XXXXXXXXXXXXXXXXXX", "(10 horas, 1 waypoint/seg) obj Location = " + new Gson().toJson(new Location("dadf")).length() * 10 * 3600 / 1024 /1024 + " MB");
-//
-//        List<LatLong> latLongs = new ArrayList<>();
-//        for (int i = 0; i < 10 * 3600; i++) {
-//            latLongs.add(new LatLong(0.468464684684864, 1.654646846848, 212, true));
-//        }
-//        routeStatsRepository.update(new RouteStats(1, 2, 3, 4, 5, 6, null, latLongs, null));
-//        System.exit(0);
     }
 
     @Override
     public void onDestroy() {
-        Log.e("RouteFragment", "onDestroy()");
         super.onDestroy();
         unsubscribe();
     }
@@ -228,7 +218,6 @@ public class RouteFragment extends Fragment {
     }
 
     private void startListenForLocationUpdates() {
-        Log.e("RouteFragment", "startListenForLocationUpdates");
         if (RxGpsService.isServiceStarted()) {
             subscriptions = new CompositeSubscription();
             subscriptions.add(RxGpsService.instance().onRouteStatsUpdates()

@@ -52,7 +52,9 @@ RxGpsService.builder(getActivity())
 
             @Override
             public void onServiceAlreadyStarted() {
-                // Service is already started. Do your stuff
+                // Service is already started. 
+                // Now you can listen for location updates
+                startListenForLocationUpdates();
             }
 
             @Override
@@ -86,7 +88,9 @@ RxGpsService.builder(getActivity())
 
             @Override
             public void onServiceAlreadyStarted() {
-                // Service is already started. Do your stuff
+                // Service is already started. 
+                // Now you can listen for location updates
+                startListenForLocationUpdates();
             }
 
             @Override
@@ -119,7 +123,9 @@ RxGpsService.builder(getActivity())
 
             @Override
             public void onServiceAlreadyStarted() {
-                // Service is already started. Do your stuff
+                // Service is already started. 
+                // Now you can listen for location updates
+                startListenForLocationUpdates();
             }
 
             @Override
@@ -179,9 +185,9 @@ public class RouteFragment extends Fragment {
 ```
 
 
-### Stoping and resuming the route trip
+### Stopping and resuming the route trip
 
-You can stop or resume the route trip by using [RxGpsService#stopChrono()]() or [RxGpsService#playChrono()]() or you can enable the navigation mode to auto by using [RxGpsService#setNavigationModeAuto()]() which will use `.withSpeedMinModeAuto()` to stop/resume the chrono if speed if lower/higher than specified respectively.
+You can stop or resume the route trip by using [RxGpsService#stopChrono()]() or [RxGpsService#playChrono()]() or you can enable the navigation mode to auto by using [RxGpsService#setNavigationModeAuto()]() which will use `builder.withSpeedMinModeAuto()` to stop/resume the chrono if speed if lower/higher than specified respectively.
 But even with the navigation in on mode auto you can also use [RxGpsService#stopChrono()]() or [RxGpsService#playChrono()]().
 
 Notice that [RxGpsService#onRouteStatsUpdates()]() method will receive updates every seconds even when the [RxGpsService#stopChrono()]() is called, but the [RouteStats]() object will be the same just before when the chrono was stopped. So if you do not want to receive updates you only have to unsubscribe from the [RxGpsService#onRouteStatsUpdates()]() subscription.
@@ -190,6 +196,13 @@ Notice that [RxGpsService#onRouteStatsUpdates()]() method will receive updates e
 ## Example
 
 You can see a complete example in [sample app]()
+
+## A benchmark case
+
+This is a memory size reference for [RouteStats]() running for 10 hour and emitting 1 meaningful waypoint per second:
+
+* Using `builder.withDetailedWaypoints(false)`: ~ 3Mb
+* Using `builder.withDetailedWaypoints(true)`: ~ 12Mb
 
 ## Credits
 * Runtime permissions: [RxPermissions](https://github.com/tbruyelle/RxPermissions)
@@ -204,6 +217,7 @@ You can see a complete example in [sample app]()
 
 ## Another author's libraries:
 * [RxPaparazzo](https://github.com/miguelbcr/RxPaparazzo): RxJava extension for Android to take images using camera and gallery.
+* [OkAdapters](https://github.com/miguelbcr/OkAdapters): Wrappers for Android adapters to simply its api at a minimum
 
 ## Another useful libraries used on the sample app:
 * [ReactiveCache](https://github.com/VictorAlbertos/ReactiveCache): A reactive cache for Android and Java which honors the Observable chain.
