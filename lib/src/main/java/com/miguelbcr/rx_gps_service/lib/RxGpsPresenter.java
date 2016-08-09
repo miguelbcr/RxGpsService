@@ -92,7 +92,7 @@ class RxGpsPresenter {
         return LatLongDetailed.create(location, isCheckPoint);
     }
 
-    void attachView(GpsServiceView view) {
+    void attachView(RxGpsServiceView view) {
         // receive locations and filter them every location update interval
         subscriptions.add(new RxLocation(gpsConfig).getCurrentLocationForService()
                 .flatMap(new Func1<Location, Observable<Float>>() {
@@ -351,7 +351,7 @@ class RxGpsPresenter {
     }
 
     private boolean isStageDistanceGoalReached() {
-        if (!stageDistanceReached) {
+        if (!stageDistanceReached && gpsConfig.getStageDistance() > 0) {
             if (distanceAccumulated > nextStageDistanceGoal) {
                 if (gpsConfig.isDebugMode()) {
                     Log.d(TAG, "stageDistanceReached (stage=" + gpsConfig.getStageDistance() + ") at distance of " + distanceAccumulated);

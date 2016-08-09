@@ -28,7 +28,7 @@ import com.miguelbcr.rx_gps_service.lib.entities.RouteStats;
 
 import rx.Observable;
 
-public class RxGpsService extends Service implements GpsServiceView {
+public class RxGpsService extends Service implements RxGpsServiceView {
     private static RxGpsService instance;
     private static Listener listener;
     private static GpsConfig gpsConfig;
@@ -38,8 +38,28 @@ public class RxGpsService extends Service implements GpsServiceView {
     private boolean isChronoPlaying;
 
     public interface Listener {
+        /**
+         * A {@link android.support.v4.app.NotificationCompat.Builder} is required in order to
+         * notify the service is running.<br/><br/>
+         * You can use {@link com.miguelbcr.rx_gps_service.lib.entities.RxGpsServiceExtras} to show
+         * additional info on the notification.
+         *
+         * @param context Use this context within this method body if any context is requiered.
+         * @return
+         */
         NotificationCompat.Builder notificationServiceStarted(Context context);
+
+        /**
+         * This method is invoked when the service is already started.
+         */
         void onServiceAlreadyStarted();
+
+        /**
+         * This method is invoked when {@link #setNavigationModeAuto(boolean)} is called or when
+         * the mode {@code auto} is set and {@link #playChrono()} or {@link #stopChrono()} are called.
+         *
+         * @param isAuto
+         */
         void onNavigationModeChanged(boolean isAuto);
     }
 
@@ -106,7 +126,7 @@ public class RxGpsService extends Service implements GpsServiceView {
         }
     }
 
-    public Observable<RouteStats> updatesRouteStats() {
+    public Observable<RouteStats> onRouteStatsUpdates() {
         notificationFactory.listenForUpdates(oRouteStats);
 
         return oRouteStats;
@@ -148,7 +168,8 @@ public class RxGpsService extends Service implements GpsServiceView {
         }
 
         /**
-         * Shows extra information on debug mode
+         * Shows extra information on debug mode.<br/>
+         * Default false
          *
          * @param debugMode
          * @return
@@ -159,7 +180,8 @@ public class RxGpsService extends Service implements GpsServiceView {
         }
 
         /**
-         * Stage distance reached in meters to be notified
+         * Stage distance reached in meters to be notified.<br/>
+         * Default 0
          *
          * @param stageDistance
          * @return
@@ -170,7 +192,8 @@ public class RxGpsService extends Service implements GpsServiceView {
         }
 
         /**
-         * Min distance traveled in meters to be considered meaningful
+         * Min distance traveled in meters to be considered meaningful.<br/>
+         * Default 10 meters
          *
          * @param minDistanceTraveled
          * @return
@@ -181,7 +204,8 @@ public class RxGpsService extends Service implements GpsServiceView {
         }
 
         /**
-         * Speed treshold in meters per second to start or pause chrono in mode auto
+         * Speed treshold in meters per second to start or pause chrono in mode auto.<br/>
+         * Default 5 km/h
          *
          * @param speedMinModeAuto
          * @return
@@ -192,7 +216,8 @@ public class RxGpsService extends Service implements GpsServiceView {
         }
 
         /**
-         * Discard higher speeds in meters per seconds
+         * Discard higher speeds in meters per seconds<br/>
+         * Default 150 km/h
          *
          * @param discardSpeedsAbove
          * @return
@@ -203,7 +228,8 @@ public class RxGpsService extends Service implements GpsServiceView {
         }
 
         /**
-         * Sets the {@link com.google.android.gms.location.LocationRequest} priority
+         * Sets the {@link com.google.android.gms.location.LocationRequest} priority.<br/>
+         * Default {@link com.google.android.gms.location.LocationRequest#PRIORITY_HIGH_ACCURACY}
          *
          * @param priority A {@link com.google.android.gms.location.LocationRequest} value
          * @return
@@ -214,7 +240,8 @@ public class RxGpsService extends Service implements GpsServiceView {
         }
 
         /**
-         * Location update interval in milliseconds
+         * Location update interval in milliseconds.<br/>
+         * Default 10 seconds
          *
          * @param interval
          * @return
@@ -225,7 +252,8 @@ public class RxGpsService extends Service implements GpsServiceView {
         }
 
         /**
-         * The fastest location update interval in milliseconds
+         * The fastest location update interval in milliseconds.<br/>
+         * Default 5 seconds
          *
          * @param fastestInterval
          * @return
@@ -235,6 +263,14 @@ public class RxGpsService extends Service implements GpsServiceView {
             return this;
         }
 
+        /**
+         * Uses simple or detailed waypoints for your route, but not both of them.<br/><br/>
+         * See {@link RouteStats#latLongs()} and {@link RouteStats#latLongsDetailed()}.<br/>
+         * Default false
+         *
+         * @param detailed
+         * @return
+         */
         public Builder withDetailedWaypoints(boolean detailed) {
             this.gpsConfig.setDetailedWaypoints(detailed);
             return this;
@@ -244,13 +280,13 @@ public class RxGpsService extends Service implements GpsServiceView {
          * {@link #instance()} object could not be available immediately just after call this method.<br/>
          * You should do your stuff on {@link Listener#onServiceAlreadyStarted()} method
          *
-         * @param context
+         * @param listener
          */
-        public void startService(Context context, Listener listener) {
+        public void startService(Listener listener) {
             if (RxGpsService.instance == null) {
                 RxGpsService.gpsConfig = this.gpsConfig;
                 RxGpsService.listener = listener;
-                context.startService(new Intent(context, RxGpsService.class));
+                gpsConfig.getActivity().startService(new Intent(gpsConfig.getActivity(), RxGpsService.class));
             }
         }
     }

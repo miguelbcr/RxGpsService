@@ -21,6 +21,6 @@ import com.miguelbcr.rx_gps_service.lib.entities.RouteStats;
 
 import rx.Observable;
 
-interface GpsServiceView {
+interface RxGpsServiceView {
     void updatesRouteStats(Observable<RouteStats> oRouteStats);
 }

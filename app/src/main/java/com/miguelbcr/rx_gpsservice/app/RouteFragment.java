@@ -162,6 +162,7 @@ public class RouteFragment extends Fragment {
 
     private void startLocationService() {
         if (!RxGpsService.isServiceStarted()) {
+
             RxGpsService.builder(getActivity())
                     .withDebugMode(true)
                     .withSpeedMinModeAuto(5 / 3.6f)
@@ -172,7 +173,7 @@ public class RouteFragment extends Fragment {
                     .withInterval(10000)
                     .withFastestInterval(5000)
                     .withDetailedWaypoints(false)
-                    .startService(getContext(), new RxGpsService.Listener() {
+                    .startService(new RxGpsService.Listener() {
                         @Override
                         public NotificationCompat.Builder notificationServiceStarted(Context context) {
                             int requestID = (int) System.currentTimeMillis();
@@ -230,13 +231,7 @@ public class RouteFragment extends Fragment {
         Log.e("RouteFragment", "startListenForLocationUpdates");
         if (RxGpsService.isServiceStarted()) {
             subscriptions = new CompositeSubscription();
-            subscriptions.add(RxGpsService.instance().updatesRouteStats()
-                    .doOnError(new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            throwable.printStackTrace();
-                        }
-                    })
+            subscriptions.add(RxGpsService.instance().onRouteStatsUpdates()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<RouteStats>() {

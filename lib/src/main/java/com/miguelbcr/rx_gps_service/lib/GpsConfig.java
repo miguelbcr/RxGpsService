@@ -30,7 +30,7 @@ class GpsConfig {
     GpsConfig(Activity activity) {
         this.activity = activity;
         this.debugMode = false;
-        this.stageDistance = 1000;
+        this.stageDistance = 0;
         this.minDistanceTraveled = 10;
         this.speedMinModeAuto = 5 / 3.6f;
         this.discardSpeedsAbove = 150 / 3.6f;
