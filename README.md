@@ -222,3 +222,4 @@ This is a memory size reference for [RouteStats](https://github.com/miguelbcr/Rx
 ## Another useful libraries used on the sample app:
 * [ReactiveCache](https://github.com/VictorAlbertos/ReactiveCache): A reactive cache for Android and Java which honors the Observable chain.
 * [Jolyglot](https://github.com/VictorAlbertos/Jolyglot): Agnostic Json abstraction to perform data binding operations for Android and Java.
+* [ACRA](https://github.com/ACRA/acra): Application Crash Reports for Android
