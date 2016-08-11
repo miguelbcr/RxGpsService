@@ -139,7 +139,7 @@ You can see all available options in [RxGpsServiceExtras](https://github.com/mig
 
 ### Listening for location updates
 
-In order to get the latest updated [RouteStats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) object, you will need to subscribe to the [RxGpsService#onRouteStatsUpdates()]() method, which is called every second, because of the chrono, but the [RouteStats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) could vary depending on the [GpsConfig](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/GpsConfig.java) used on the RxGpsService.Builder.
+In order to get the latest updated [RouteStats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) object, you will need to subscribe to the [RxGpsService#onRouteStatsUpdates()](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/RxGpsService.java) method, which is called every second, because of the chrono, but the [RouteStats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) could vary depending on the [GpsConfig](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/GpsConfig.java) used on the RxGpsService.Builder.
 
 ```java
 public class RouteFragment extends Fragment {
