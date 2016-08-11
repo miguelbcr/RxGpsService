@@ -1,6 +1,6 @@
 # RxGpsService
 
-An Android service to retrieve GPS locations and [route stats]() using [RxJava](https://github.com/ReactiveX/RxJava)
+An Android service to retrieve GPS locations and [route stats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) using [RxJava](https://github.com/ReactiveX/RxJava)
 
 
 ## Features:
@@ -37,7 +37,7 @@ dependencies {
 
 ### Starting the service
 
-The basic usage is as follow, it will use the default configuration defined in [GpsConfig]()
+The basic usage is as follow, it will use the default configuration defined in [GpsConfig](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/GpsConfig.java)
 
 ```java
 RxGpsService.builder(getActivity())
@@ -100,7 +100,7 @@ RxGpsService.builder(getActivity())
         });
 ```
 
-Additionally for [NotificationCompat.Builder]() you can set extra parameters in order to customize the notification created by RxGpsService:
+Additionally for [NotificationCompat.Builder](https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html) you can set extra parameters in order to customize the notification created by RxGpsService:
 
 ```java
 RxGpsService.builder(getActivity())
@@ -135,11 +135,11 @@ RxGpsService.builder(getActivity())
         });
 ```
 
-You can see all available options in [RxGpsServiceExtras]()
+You can see all available options in [RxGpsServiceExtras](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RxGpsServiceExtras.java)
 
 ### Listening for location updates
 
-In order to get the latest updated [RouteStats]() object, you will need to subscribe to the [RxGpsService#onRouteStatsUpdates()]() method, which is called every second, because of the chrono, but the [RouteStats]() could vary depending on the [GpsConfig]() used on the RxGpsService.Builder.
+In order to get the latest updated [RouteStats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) object, you will need to subscribe to the [RxGpsService#onRouteStatsUpdates()]() method, which is called every second, because of the chrono, but the [RouteStats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) could vary depending on the [GpsConfig](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/GpsConfig.java) used on the RxGpsService.Builder.
 
 ```java
 public class RouteFragment extends Fragment {
@@ -161,7 +161,7 @@ public class RouteFragment extends Fragment {
     private void startListenForLocationUpdates() {
         if (RxGpsService.isServiceStarted()) {
             subscriptions = new CompositeSubscription();
-            subscriptions.add(RxGpsService.instance().updatesRouteStats()
+            subscriptions.add(RxGpsService.instance().onRouteStatsUpdates()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<RouteStats>() {
@@ -187,19 +187,19 @@ public class RouteFragment extends Fragment {
 
 ### Stopping and resuming the route trip
 
-You can stop or resume the route trip by using [RxGpsService#stopChrono()]() or [RxGpsService#playChrono()]() or you can enable the navigation mode to auto by using [RxGpsService#setNavigationModeAuto()]() which will use `builder.withSpeedMinModeAuto()` to stop/resume the chrono if speed if lower/higher than specified respectively.
-But even with the navigation in on mode auto you can also use [RxGpsService#stopChrono()]() or [RxGpsService#playChrono()]().
+You can stop or resume the route trip by using [RxGpsService#stopChrono()](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/RxGpsService.java) or [RxGpsService#playChrono()](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/RxGpsService.java) or you can enable the navigation mode to auto by using [RxGpsService#setNavigationModeAuto()](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/RxGpsService.java) which will use `builder.withSpeedMinModeAuto()` to stop/resume the chrono if speed if lower/higher than specified respectively.
+But even with the navigation in on mode auto you can also use [RxGpsService#stopChrono()](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/RxGpsService.java) or [RxGpsService#playChrono()](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/RxGpsService.java).
 
-Notice that [RxGpsService#onRouteStatsUpdates()]() method will receive updates every seconds even when the [RxGpsService#stopChrono()]() is called, but the [RouteStats]() object will be the same just before when the chrono was stopped. So if you do not want to receive updates you only have to unsubscribe from the [RxGpsService#onRouteStatsUpdates()]() subscription.
+Notice that [RxGpsService#onRouteStatsUpdates()](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/RxGpsService.java) method will receive updates every seconds even when the [RxGpsService#stopChrono()](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/RxGpsService.java) is called, but the [RouteStats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) object will be the same just before when the chrono was stopped. So if you do not want to receive updates you only have to unsubscribe from the [RxGpsService#onRouteStatsUpdates()](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/RxGpsService.java) subscription.
 
 
 ## Example
 
-You can see a complete example in [sample app]()
+You can see a complete example in [sample app](https://github.com/miguelbcr/RxGpsService/tree/master/app/src/main/java/com/miguelbcr/rx_gpsservice/app)
 
 ## A benchmark case
 
-This is a memory size reference for [RouteStats]() running for 10 hour and emitting 1 meaningful waypoint per second:
+This is a memory size reference for [RouteStats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) running for 10 hour and emitting 1 meaningful waypoint per second:
 
 * Using `builder.withDetailedWaypoints(false)`: ~ 3Mb
 * Using `builder.withDetailedWaypoints(true)`: ~ 12Mb
