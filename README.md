@@ -11,7 +11,7 @@ An Android service to retrieve GPS locations and [route stats](https://github.co
 - Runtime permissions
 - Highly customizable
 - Always alive even if app is closed
-- Provides route stats (time, speeds, distance and waypoints)
+- Provides [route stats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) (time, speeds, distance and waypoints)
 - Navigation mode auto/manual 
 - Possibility to stop and resume the chrono at anytime
 
