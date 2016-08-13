@@ -1,3 +1,6 @@
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RxGpsService-green.svg?style=true)](https://android-arsenal.com/details/1/4137)
+
+
 # RxGpsService
 
 An Android service to retrieve GPS locations and [route stats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) using [RxJava](https://github.com/ReactiveX/RxJava)
