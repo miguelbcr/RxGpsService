@@ -6,7 +6,7 @@ android {
     buildToolsVersion "24.0.1"
     defaultConfig {
         applicationId "com.miguelbcr.rxgpsservice"
-        minSdkVersion 16
+        minSdkVersion 10
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -24,15 +24,15 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':lib')
 
-    compile 'com.android.support:appcompat-v7:24.1.1'
+    compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha4'
     provided "com.google.auto.value:auto-value:1.2"
     apt "com.google.auto.value:auto-value:1.2"
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'ch.acra:acra:4.8.5'
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.1.8'
-    compile 'com.github.VictorAlbertos:ReactiveCache:0.0.2'
+    compile 'io.reactivex:rxjava:1.1.10'
+    compile 'com.github.VictorAlbertos:ReactiveCache:0.0.3'
     compile 'com.github.VictorAlbertos.Jolyglot:gson:0.0.3'
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

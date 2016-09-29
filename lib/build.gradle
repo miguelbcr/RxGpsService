@@ -7,7 +7,7 @@ android {
     buildToolsVersion "24.0.1"
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 10
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -25,15 +25,15 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.google.android.gms:play-services-location:9.4.0'
-    compile 'com.google.android.gms:play-services-places:9.4.0'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.google.android.gms:play-services-location:9.6.1'
+    compile 'com.google.android.gms:play-services-places:9.6.1'
 
     provided "com.google.auto.value:auto-value:1.2"
     apt "com.google.auto.value:auto-value:1.2"
-    compile 'io.reactivex:rxjava:1.1.8'
-    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
-    compile 'pl.charmas.android:android-reactive-location:0.9@aar'
+    compile 'io.reactivex:rxjava:1.1.10'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.1@aar'
+    compile 'pl.charmas.android:android-reactive-location:0.10@aar'
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

@@ -286,7 +286,8 @@ public class RxGpsService extends Service implements RxGpsServiceView {
             if (RxGpsService.instance == null) {
                 RxGpsService.gpsConfig = this.gpsConfig;
                 RxGpsService.listener = listener;
-                gpsConfig.getActivity().startService(new Intent(gpsConfig.getActivity(), RxGpsService.class));
+                Intent intent = new Intent(gpsConfig.getActivity(), RxGpsService.class);
+                gpsConfig.getActivity().startService(intent);
             }
         }
     }

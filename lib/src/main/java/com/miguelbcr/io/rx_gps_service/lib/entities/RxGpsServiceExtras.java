@@ -84,12 +84,27 @@ public abstract class RxGpsServiceExtras {
 
     public static RxGpsServiceExtras createFromBundle(Bundle extras) {
         int notificationIdServiceStarted = extras.getInt(NOTIFICATION_ID_SERVICE_STARTED, 1);
-        String notificationGroupServiceStarted = extras.getString(NOTIFICATION_GROUP_SERVICE_STARTED, "ServiceStartedGroup");
-        String bigContentTitle = extras.getString(BIG_CONTENT_TITLE, "");
+        String notificationGroupServiceStarted = extras.getString(NOTIFICATION_GROUP_SERVICE_STARTED);
+        if (notificationGroupServiceStarted == null) {
+            notificationGroupServiceStarted = "ServiceStartedGroup";
+        }
+
+        String bigContentTitle = extras.getString(BIG_CONTENT_TITLE);
+        if (bigContentTitle == null) {
+            bigContentTitle = "";
+        }
+
         boolean showTime = extras.getBoolean(SHOW_TIME, false);
-        String timeText = extras.getString(TEXT_TIME, "");
+        String timeText = extras.getString(TEXT_TIME);
+        if (timeText == null) {
+            timeText = "";
+        }
+
         boolean showDistance = extras.getBoolean(SHOW_DISTANCE, false);
-        String distanceText = extras.getString(TEXT_DISTANCE, "");
+        String distanceText = extras.getString(TEXT_DISTANCE);
+        if (distanceText == null) {
+            distanceText = "";
+        }
 
         return RxGpsServiceExtras.create(notificationIdServiceStarted,
                 notificationGroupServiceStarted, bigContentTitle,

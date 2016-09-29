@@ -12,9 +12,9 @@ import io.victoralbertos.jolyglot.GsonSpeaker;
  * Created by miguel on 15/07/2016.
  */
 
-@ReportsCrashes(
-        mailTo = "youremail@mail.com"
-)
+//@ReportsCrashes(
+//        mailTo = "youremail@mail.com"
+//)
 public class BaseApp extends Application {
     private ReactiveCache reactiveCache;
 
@@ -22,7 +22,7 @@ public class BaseApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        ACRA.init(this);
+//        ACRA.init(this);
         initReactiveCache();
     }
 
