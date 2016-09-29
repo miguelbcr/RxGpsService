@@ -1,3 +1,6 @@
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RxGpsService-green.svg?style=true)](https://android-arsenal.com/details/1/4137)
+
+
 # RxGpsService
 
 An Android service to retrieve GPS locations and [route stats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) using [RxJava](https://github.com/ReactiveX/RxJava)
@@ -8,7 +11,7 @@ An Android service to retrieve GPS locations and [route stats](https://github.co
 - Runtime permissions
 - Highly customizable
 - Always alive even if app is closed
-- Provides route stats (time, speeds, distance and waypoints)
+- Provides [route stats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) (time, speeds, distance and waypoints)
 - Navigation mode auto/manual 
 - Possibility to stop and resume the chrono at anytime
 
@@ -27,7 +30,7 @@ allprojects {
 And add next dependencies in the build.gradle of the module:
 ```gradle
 dependencies {
-    compile "com.github.miguelbcr:RxGpsService:0.0.1"
+    compile "com.github.miguelbcr:RxGpsService:0.0.2"
     compile "io.reactivex:rxjava:1.1.8"
 }
 ```
@@ -139,7 +142,7 @@ You can see all available options in [RxGpsServiceExtras](https://github.com/mig
 
 ### Listening for location updates
 
-In order to get the latest updated [RouteStats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) object, you will need to subscribe to the [RxGpsService#onRouteStatsUpdates()]() method, which is called every second, because of the chrono, but the [RouteStats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) could vary depending on the [GpsConfig](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/GpsConfig.java) used on the RxGpsService.Builder.
+In order to get the latest updated [RouteStats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) object, you will need to subscribe to the [RxGpsService#onRouteStatsUpdates()](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/RxGpsService.java) method, which is called every second, because of the chrono, but the [RouteStats](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/entities/RouteStats.java) could vary depending on the [GpsConfig](https://github.com/miguelbcr/RxGpsService/blob/master/lib/src/main/java/com/miguelbcr/io/rx_gps_service/lib/GpsConfig.java) used on the RxGpsService.Builder.
 
 ```java
 public class RouteFragment extends Fragment {
@@ -222,3 +225,4 @@ This is a memory size reference for [RouteStats](https://github.com/miguelbcr/Rx
 ## Another useful libraries used on the sample app:
 * [ReactiveCache](https://github.com/VictorAlbertos/ReactiveCache): A reactive cache for Android and Java which honors the Observable chain.
 * [Jolyglot](https://github.com/VictorAlbertos/Jolyglot): Agnostic Json abstraction to perform data binding operations for Android and Java.
+* [ACRA](https://github.com/ACRA/acra): Application Crash Reports for Android
