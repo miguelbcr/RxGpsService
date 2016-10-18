@@ -156,13 +156,14 @@ public class RouteFragment extends Fragment {
 
     private void unsubscribe() {
         if (subscriptions != null) {
-            subscriptions.unsubscribe();
+            subscriptions.clear();
             subscriptions = null;
         }
     }
 
     private void startListenForLocationUpdates() {
         if (RxGpsService.isServiceStarted()) {
+            unsubscribe()
             subscriptions = new CompositeSubscription();
             subscriptions.add(RxGpsService.instance().onRouteStatsUpdates()
                     .subscribeOn(Schedulers.io())
