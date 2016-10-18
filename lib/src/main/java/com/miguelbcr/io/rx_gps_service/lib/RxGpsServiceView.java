@@ -16,11 +16,13 @@
 
 package com.miguelbcr.io.rx_gps_service.lib;
 
-
 import com.miguelbcr.io.rx_gps_service.lib.entities.RouteStats;
 
 import rx.Observable;
 
 interface RxGpsServiceView {
-    void updatesRouteStats(Observable<RouteStats> oRouteStats);
+  /**
+   * Internal usage
+   */
+  void updatesRouteStats(Observable<RouteStats> oRouteStats);
 }

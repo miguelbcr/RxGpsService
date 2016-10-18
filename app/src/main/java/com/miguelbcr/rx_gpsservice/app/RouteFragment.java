@@ -173,10 +173,10 @@ public class RouteFragment extends Fragment {
 
                             Bundle extras = new Bundle();
                             extras.putBoolean(RxGpsServiceExtras.SHOW_TIME, true);
-                            extras.putString(RxGpsServiceExtras.TEXT_TIME, getString(R.string.time_elapsed));
+                            extras.putString(RxGpsServiceExtras.TEXT_TIME, context.getString(R.string.time_elapsed));
                             extras.putBoolean(RxGpsServiceExtras.SHOW_DISTANCE, true);
-                            extras.putString(RxGpsServiceExtras.TEXT_DISTANCE, getString(R.string.distance_traveled));
-                            extras.putString(RxGpsServiceExtras.BIG_CONTENT_TITLE, getString(R.string.route_details));
+                            extras.putString(RxGpsServiceExtras.TEXT_DISTANCE, context.getString(R.string.distance_traveled));
+                            extras.putString(RxGpsServiceExtras.BIG_CONTENT_TITLE, context.getString(R.string.route_details));
 
                             return new NotificationCompat.Builder(context)
                                     .setTicker(context.getString(R.string.app_name))
@@ -214,7 +214,10 @@ public class RouteFragment extends Fragment {
 
     private void stopListenForLocationUpdates() {
         stopChrono();
-        subscriptions.clear();
+
+        if (subscriptions != null) {
+            subscriptions.clear();
+        }
     }
 
     private void startListenForLocationUpdates() {

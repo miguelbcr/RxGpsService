@@ -112,16 +112,16 @@ RxGpsService.builder(getActivity())
             public NotificationCompat.Builder notificationServiceStarted(Context context) {
                 Bundle extras = new Bundle();
                 extras.putBoolean(RxGpsServiceExtras.SHOW_TIME, true);
-                extras.putString(RxGpsServiceExtras.TEXT_TIME, getString(R.string.time_elapsed));
+                extras.putString(RxGpsServiceExtras.TEXT_TIME, context.getString(R.string.time_elapsed));
                 extras.putBoolean(RxGpsServiceExtras.SHOW_DISTANCE, true);
-                extras.putString(RxGpsServiceExtras.TEXT_DISTANCE, getString(R.string.distance_traveled));
-                extras.putString(RxGpsServiceExtras.BIG_CONTENT_TITLE, getString(R.string.route_details));
+                extras.putString(RxGpsServiceExtras.TEXT_DISTANCE, context.getString(R.string.distance_traveled));
+                extras.putString(RxGpsServiceExtras.BIG_CONTENT_TITLE, context.getString(R.string.route_details));
 
                 return new NotificationCompat.Builder(context)
                                .setContentTitle(context.getString(R.string.app_name))
                                .setContentText(context.getString(R.string.route_started))
                                .setSmallIcon(R.drawable.ic_place)
-                               .setExtras(extras);;
+                               .setExtras(extras);
             }
 
             @Override
@@ -175,7 +175,7 @@ public class RouteFragment extends Fragment {
                     }, new Action1<Throwable>() {
                         @Override
                         public void call(Throwable throwable) {
-                            RxGpsService.stopService(getContext());;
+                            RxGpsService.stopService(getContext());
                             unsubscribe();
                         }
                     }));

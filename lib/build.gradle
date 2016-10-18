@@ -25,14 +25,13 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.google.android.gms:play-services-location:9.6.1'
     compile 'com.google.android.gms:play-services-places:9.6.1'
 
     provided "com.google.auto.value:auto-value:1.2"
     apt "com.google.auto.value:auto-value:1.2"
     compile 'io.reactivex:rxjava:1.1.10'
-    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.1@aar'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.8.0@aar'
     compile 'pl.charmas.android:android-reactive-location:0.10@aar'
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

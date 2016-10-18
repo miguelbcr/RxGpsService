@@ -256,7 +256,8 @@ class RxGpsPresenter {
                                 speedAverage,
                                 speed,
                                 LatLongDetailed.create(lastMeaningLocation, isStageDistanceGoalReached),
-                                latLongs, latLongsDetailed);
+                                latLongs,
+                                latLongsDetailed);
                     }
                 });
     }
