@@ -117,10 +117,13 @@ class NotificationFactory {
             }
 
             connectableObservable.subscribe(new Action1<RouteStats>() {
-                @Override
-                public void call(RouteStats routeStats) {
+                @Override public void call(RouteStats routeStats) {
                     notificationManager.notify(rxGpsServiceExtras.notificationIdServiceStarted(),
-                            getNotificationServiceStarted(routeStats.time(), routeStats.distance()));
+                        getNotificationServiceStarted(routeStats.time(), routeStats.distance()));
+                }
+            }, new Action1<Throwable>() {
+                @Override public void call(Throwable throwable) {
+                    // nothing
                 }
             });
         }
