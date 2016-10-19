@@ -16,47 +16,43 @@
 
 package com.miguelbcr.io.rx_gps_service.lib;
 
-
 import com.miguelbcr.io.rx_gps_service.lib.entities.LatLong;
-
 import rx.Observable;
 import rx.functions.Func1;
 
 class GetTripDistance {
-    private long distanceAccumulated;
-    private long lastDistance;
-    private LatLong previousLatLong;
-    private LatLong currentLatLong;
-    private final Utilities utilities;
+  private long distanceAccumulated;
+  private long lastDistance;
+  private LatLong previousLatLong;
+  private LatLong currentLatLong;
+  private final Utilities utilities;
 
-    GetTripDistance() {
-        utilities = new Utilities();
-    }
+  GetTripDistance() {
+    utilities = new Utilities();
+  }
 
-    void setParams(long distanceAccumulated, LatLong previousLatLong, LatLong currentLatLong) {
-        this.distanceAccumulated = distanceAccumulated;
-        this.previousLatLong = previousLatLong;
-        this.currentLatLong = currentLatLong;
-    }
+  void setParams(long distanceAccumulated, LatLong previousLatLong, LatLong currentLatLong) {
+    this.distanceAccumulated = distanceAccumulated;
+    this.previousLatLong = previousLatLong;
+    this.currentLatLong = currentLatLong;
+  }
 
-    long getDistanceAccumulated() {
-        return distanceAccumulated;
-    }
+  long getDistanceAccumulated() {
+    return distanceAccumulated;
+  }
 
-    long getLastDistance() {
-        return lastDistance;
-    }
+  long getLastDistance() {
+    return lastDistance;
+  }
 
-
-    Observable<Long> builtObservable() {
-        return utilities.getDistanceFromTo(previousLatLong, currentLatLong)
-                .concatMap(new Func1<Float, Observable<? extends Long>>() {
-                    @Override
-                    public Observable<? extends Long> call(Float lastDistance) {
-                        GetTripDistance.this.lastDistance = lastDistance.longValue();
-                        distanceAccumulated += lastDistance.intValue();
-                        return Observable.just(distanceAccumulated);
-                    }
-                });
-    }
+  Observable<Long> builtObservable() {
+    return utilities.getDistanceFromTo(previousLatLong, currentLatLong)
+        .concatMap(new Func1<Float, Observable<? extends Long>>() {
+          @Override public Observable<? extends Long> call(Float lastDistance) {
+            GetTripDistance.this.lastDistance = lastDistance.longValue();
+            distanceAccumulated += lastDistance.intValue();
+            return Observable.just(distanceAccumulated);
+          }
+        });
+  }
 }

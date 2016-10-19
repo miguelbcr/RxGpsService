@@ -18,11 +18,11 @@ package com.miguelbcr.io.rx_gps_service.lib.entities;
 
 public class PermissionDeniedException extends RuntimeException {
 
-    public PermissionDeniedException() {
-        this("No permission granted");
-    }
+  public PermissionDeniedException() {
+    this("No permission granted");
+  }
 
-    public PermissionDeniedException(String detailMessage) {
-        super(detailMessage);
-    }
+  public PermissionDeniedException(String detailMessage) {
+    super(detailMessage);
+  }
 }

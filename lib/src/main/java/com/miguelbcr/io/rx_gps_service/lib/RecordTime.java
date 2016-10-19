@@ -17,36 +17,31 @@
 package com.miguelbcr.io.rx_gps_service.lib;
 
 import java.util.concurrent.TimeUnit;
-
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
 import rx.observables.ConnectableObservable;
 
 class RecordTime {
-    private ConnectableObservable<Long> oChronometer;
-    private Subscriber<Long> subscriber;
+  private ConnectableObservable<Long> oChronometer;
+  private Subscriber<Long> subscriber;
 
-    RecordTime() {
-        oChronometer = Observable.<Long>create(new Observable.OnSubscribe<Long>() {
-            @Override
-            public void call(Subscriber<? super Long> subscriber) {
-                RecordTime.this.subscriber = (Subscriber<Long>) subscriber;
-            }
-        }).publish();
-        oChronometer.connect();
+  RecordTime() {
+    oChronometer = Observable.<Long>create(new Observable.OnSubscribe<Long>() {
+      @Override public void call(Subscriber<? super Long> subscriber) {
+        RecordTime.this.subscriber = (Subscriber<Long>) subscriber;
+      }
+    }).publish();
+    oChronometer.connect();
 
-        Observable.interval(1, TimeUnit.SECONDS)
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long elapsedTime) {
-                        subscriber.onNext(elapsedTime);
-                    }
-                });
+    Observable.interval(1, TimeUnit.SECONDS).subscribe(new Action1<Long>() {
+      @Override public void call(Long elapsedTime) {
+        subscriber.onNext(elapsedTime);
+      }
+    });
+  }
 
-    }
-
-    Observable<Long> builtObservable() {
-        return oChronometer;
-    }
+  Observable<Long> builtObservable() {
+    return oChronometer;
+  }
 }

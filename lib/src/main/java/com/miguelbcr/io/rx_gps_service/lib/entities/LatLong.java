@@ -18,18 +18,21 @@ package com.miguelbcr.io.rx_gps_service.lib.entities;
 
 import com.google.auto.value.AutoValue;
 
-@AutoValue
-public abstract class LatLong {
-    public abstract double latitude();
-    public abstract double longitude();
-    public abstract float altitude();
-    public abstract boolean isCheckPoint();
+@AutoValue public abstract class LatLong {
+  public abstract double latitude();
 
-    public static LatLong create(double latitude, double longitude) {
-        return create(latitude, longitude, 0, false);
-    }
+  public abstract double longitude();
 
-    public static LatLong create(double latitude, double longitude, float altitude, boolean isCheckPoint) {
-        return new AutoValue_LatLong(latitude, longitude, altitude, isCheckPoint);
-    }
+  public abstract float altitude();
+
+  public abstract boolean isCheckPoint();
+
+  public static LatLong create(double latitude, double longitude) {
+    return create(latitude, longitude, 0, false);
+  }
+
+  public static LatLong create(double latitude, double longitude, float altitude,
+      boolean isCheckPoint) {
+    return new AutoValue_LatLong(latitude, longitude, altitude, isCheckPoint);
+  }
 }

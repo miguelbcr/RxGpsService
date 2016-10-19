@@ -19,33 +19,32 @@ package com.miguelbcr.io.rx_gps_service.lib;
 import rx.Observable;
 
 class GetTripSpeed {
-    private float speed;
-    private long time, distance;
-    private float discardSpeedsAbove;
+  private float speed;
+  private long time, distance;
+  private float discardSpeedsAbove;
 
-    GetTripSpeed() {
-    }
+  GetTripSpeed() {
+  }
 
-    void setParams(long distance, long time, float discardSpeedsAbove) {
-        this.distance = distance;
-        this.time = time;
-        this.discardSpeedsAbove = discardSpeedsAbove;
-    }
+  void setParams(long distance, long time, float discardSpeedsAbove) {
+    this.distance = distance;
+    this.time = time;
+    this.discardSpeedsAbove = discardSpeedsAbove;
+  }
 
-    long getLastTimeElapsed() {
-        return time;
-    }
+  long getLastTimeElapsed() {
+    return time;
+  }
 
-    float getSpeed() {
-        return speed;
-    }
+  float getSpeed() {
+    return speed;
+  }
 
-    Observable<Float> builtObservable() {
-        speed = time == 0 ? 0 : 1f * distance / time;
+  Observable<Float> builtObservable() {
+    speed = time == 0 ? 0 : 1f * distance / time;
 
-        if (discardSpeedsAbove > 0 && speed > discardSpeedsAbove)
-            speed = 0;
+    if (discardSpeedsAbove > 0 && speed > discardSpeedsAbove) speed = 0;
 
-        return Observable.just(speed);
-    }
+    return Observable.just(speed);
+  }
 }

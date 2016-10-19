@@ -19,19 +19,19 @@ package com.miguelbcr.io.rx_gps_service.lib;
 import rx.Observable;
 
 class GetTripSpeedAverage {
-    private float speed;
-    private long distance, time;
+  private float speed;
+  private long distance, time;
 
-    GetTripSpeedAverage() {
-    }
+  GetTripSpeedAverage() {
+  }
 
-    void setParams(long distance, long time) {
-        this.distance = distance;
-        this.time = time;
-    }
+  void setParams(long distance, long time) {
+    this.distance = distance;
+    this.time = time;
+  }
 
-    Observable<Float> builtObservable() {
-        speed = time == 0 ? 0 : 1f * distance / time;
-        return Observable.just(speed);
-    }
+  Observable<Float> builtObservable() {
+    speed = time == 0 ? 0 : 1f * distance / time;
+    return Observable.just(speed);
+  }
 }

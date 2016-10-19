@@ -16,54 +16,51 @@
 
 package com.miguelbcr.io.rx_gps_service.lib;
 
-
 import android.app.Activity;
-
 import com.miguelbcr.io.rx_gps_service.lib.entities.PermissionDeniedException;
 import com.tbruyelle.rxpermissions.RxPermissions;
-
 import rx.Observable;
 import rx.functions.Func1;
 
 final class GrantPermissions {
-    private Activity activity;
-    private String[] permissions;
+  private Activity activity;
+  private String[] permissions;
 
-    GrantPermissions(Activity activity) {
-        this.activity = activity;
+  GrantPermissions(Activity activity) {
+    this.activity = activity;
+  }
+
+  GrantPermissions with(String... permissions) {
+    this.permissions = permissions;
+    return this;
+  }
+
+  Observable<Void> builtObservable() {
+    if (permissions.length == 0) {
+      return Observable.just(null);
     }
 
-    GrantPermissions with(String... permissions) {
-        this.permissions = permissions;
-        return this;
+    return RxPermissions.getInstance(activity)
+        .request(permissions)
+        .flatMap(new Func1<Boolean, Observable<Void>>() {
+          @Override public Observable<Void> call(Boolean granted) {
+            if (granted) {
+              return Observable.just(null);
+            }
+
+            return Observable.error(
+                new PermissionDeniedException("No permissions granted: " + permissionsToString()));
+          }
+        });
+  }
+
+  private String permissionsToString() {
+    String permissionsStr = "";
+
+    for (String permission : permissions) {
+      permissionsStr += permission + "  ";
     }
 
-    Observable<Void> builtObservable() {
-        if (permissions.length == 0) {
-            return Observable.just(null);
-        }
-
-        return RxPermissions.getInstance(activity)
-                .request(permissions)
-                .flatMap(new Func1<Boolean, Observable<Void>>() {
-                    @Override
-                    public Observable<Void> call(Boolean granted) {
-                        if (granted) {
-                            return Observable.just(null);
-                        }
-
-                        return Observable.error(new PermissionDeniedException("No permissions granted: " + permissionsToString()));
-                    }
-                });
-    }
-
-    private String permissionsToString() {
-        String permissionsStr = "";
-
-        for (String permission : permissions) {
-            permissionsStr += permission + "  ";
-        }
-
-        return permissionsStr;
-    }
+    return permissionsStr;
+  }
 }

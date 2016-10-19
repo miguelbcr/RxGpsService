@@ -17,7 +17,6 @@
 package com.miguelbcr.io.rx_gps_service.lib;
 
 import com.miguelbcr.io.rx_gps_service.lib.entities.RouteStats;
-
 import rx.Observable;
 
 interface RxGpsServiceView {

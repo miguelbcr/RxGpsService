@@ -20,13 +20,11 @@ import android.Manifest;
 import android.content.IntentSender;
 import android.location.Location;
 import android.util.Log;
-
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 import rx.Observable;
 import rx.functions.Action1;
@@ -35,60 +33,62 @@ import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 public class RxLocation {
-    private static final String TAG = "RxLocation";
-    public static final int REQUEST_CHECK_LOCATION_SETTINGS = 65456;
-    private final GrantPermissions grantPermissions;
-    private GpsConfig gpsConfig;
+  private static final String TAG = "RxLocation";
+  public static final int REQUEST_CHECK_LOCATION_SETTINGS = 65456;
+  private final GrantPermissions grantPermissions;
+  private GpsConfig gpsConfig;
 
-    RxLocation(GpsConfig gpsConfig) {
-        this.gpsConfig = gpsConfig;
-        this.grantPermissions = new GrantPermissions(gpsConfig.getActivity());
-    }
+  RxLocation(GpsConfig gpsConfig) {
+    this.gpsConfig = gpsConfig;
+    this.grantPermissions = new GrantPermissions(gpsConfig.getActivity());
+  }
 
-    Observable<Location> getCurrentLocationForService() {
-        final ReactiveLocationProvider locationProvider = new ReactiveLocationProvider(gpsConfig.getActivity());
+  Observable<Location> getCurrentLocationForService() {
+    final ReactiveLocationProvider locationProvider =
+        new ReactiveLocationProvider(gpsConfig.getActivity());
 
-        final LocationRequest locationRequest = LocationRequest.create()
-                .setPriority(gpsConfig.getPriority())
-                .setInterval(gpsConfig.getInterval())
-                .setFastestInterval(gpsConfig.getFastestInterval());
+    final LocationRequest locationRequest = LocationRequest.create()
+        .setPriority(gpsConfig.getPriority())
+        .setInterval(gpsConfig.getInterval())
+        .setFastestInterval(gpsConfig.getFastestInterval());
 
-        final LocationSettingsRequest locationSettingsRequest = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest)
-                .setAlwaysShow(true)  //Reference: http://stackoverflow.com/questions/29824408/google-play-services-locationservices-api-new-option-never
-                .build();
+    final LocationSettingsRequest locationSettingsRequest =
+        new LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+            .setAlwaysShow(
+                true)  //Reference: http://stackoverflow.com/questions/29824408/google-play-services-locationservices-api-new-option-never
+            .build();
 
-        return Observable.zip(grantPermissions.with(permissions()).builtObservable().subscribeOn(Schedulers.io()),
-                locationProvider.checkLocationSettings(locationSettingsRequest).subscribeOn(Schedulers.io()),
-                new Func2<Void, LocationSettingsResult, LocationSettingsResult>() {
-                    @Override
-                    public LocationSettingsResult call(Void aVoid, LocationSettingsResult locationSettingsResult) {
-                        return locationSettingsResult;
-                    }
-                })
-                .doOnNext(new Action1<LocationSettingsResult>() {
-                    @Override
-                    public void call(LocationSettingsResult locationSettingsResult) {
-                        Status status = locationSettingsResult.getStatus();
-                        if (status.getStatusCode() == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
-                            try {
-                                status.startResolutionForResult(gpsConfig.getActivity(), REQUEST_CHECK_LOCATION_SETTINGS);
-                            } catch (IntentSender.SendIntentException exception) {
-                                Log.e(TAG, "Error opening settings activity.", exception);
-                            }
-                        }
-                    }
-                })
-                .flatMap(new Func1<LocationSettingsResult, Observable<Location>>() {
-                    @Override
-                    public Observable<Location> call(LocationSettingsResult locationSettingsResult) {
-                        return locationProvider.getUpdatedLocation(locationRequest);
-                    }
-                });
-    }
+    return Observable.zip(
+        grantPermissions.with(permissions()).builtObservable().subscribeOn(Schedulers.io()),
+        locationProvider.checkLocationSettings(locationSettingsRequest)
+            .subscribeOn(Schedulers.io()),
+        new Func2<Void, LocationSettingsResult, LocationSettingsResult>() {
+          @Override public LocationSettingsResult call(Void aVoid,
+              LocationSettingsResult locationSettingsResult) {
+            return locationSettingsResult;
+          }
+        }).doOnNext(new Action1<LocationSettingsResult>() {
+      @Override public void call(LocationSettingsResult locationSettingsResult) {
+        Status status = locationSettingsResult.getStatus();
+        if (status.getStatusCode() == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
+          try {
+            status.startResolutionForResult(gpsConfig.getActivity(),
+                REQUEST_CHECK_LOCATION_SETTINGS);
+          } catch (IntentSender.SendIntentException exception) {
+            Log.e(TAG, "Error opening settings activity.", exception);
+          }
+        }
+      }
+    }).flatMap(new Func1<LocationSettingsResult, Observable<Location>>() {
+      @Override public Observable<Location> call(LocationSettingsResult locationSettingsResult) {
+        return locationProvider.getUpdatedLocation(locationRequest);
+      }
+    });
+  }
 
-    private String[] permissions() {
-        return new String[] {Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
-    }
+  private String[] permissions() {
+    return new String[] {
+        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+  }
 }

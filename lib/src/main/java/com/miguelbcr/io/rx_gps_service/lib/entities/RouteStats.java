@@ -16,51 +16,62 @@
 
 package com.miguelbcr.io.rx_gps_service.lib.entities;
 
-
 import android.location.Location;
-
 import com.google.auto.value.AutoValue;
-
 import java.util.List;
 
-@AutoValue
-public abstract class RouteStats {
-    public abstract long time();
-    public abstract long distance();
-    public abstract float speedMax();
-    public abstract float speedMin();
-    public abstract float speedAverage();
-    public abstract float speed();
-    public abstract LatLongDetailed currentLocation();
-    public abstract List<LatLong> latLongs();
-    public abstract List<LatLongDetailed> latLongsDetailed();
+@AutoValue public abstract class RouteStats {
+  public abstract long time();
 
+  public abstract long distance();
 
-    public static RouteStats create(long time, long distance, float speedMax, float speedMin,
-                                     float speedAverage, float speed, LatLongDetailed currentLocation,
-                                     List<LatLong> latLongs, List<LatLongDetailed> latLongsDetailed) {
-        return new AutoValue_RouteStats(time, distance, speedMax, speedMin, speedAverage, speed,
-                currentLocation, latLongs, latLongsDetailed);
-    }
+  public abstract float speedMax();
 
-    public LatLong getLastLatLong() {
-        return latLongs() != null && !latLongs().isEmpty() ?
-                latLongs().get(latLongs().size() - 1) : LatLong.create(0, 0);
-    }
+  public abstract float speedMin();
 
-    public LatLongDetailed getLastLatLongDetailed() {
-        int size = latLongsDetailed().size();
-        return latLongsDetailed() != null && !latLongsDetailed().isEmpty() ?
-                latLongsDetailed().get(size - 1)
-                : LatLongDetailed.create(new Location("Location-" + size));
-    }
+  public abstract float speedAverage();
 
-    @Override
-    public String toString() {
-        return " time=" + time() +
-                " distance=" + distance() +
-                " speed=" + speed() +
-                " latLong=" + "(" + currentLocation().location().getLatitude() + ", "
-                                    + currentLocation().location().getLongitude() + ")";
-    }
+  public abstract float speed();
+
+  public abstract LatLongDetailed currentLocation();
+
+  public abstract List<LatLong> latLongs();
+
+  public abstract List<LatLongDetailed> latLongsDetailed();
+
+  public static RouteStats create(long time, long distance, float speedMax, float speedMin,
+      float speedAverage, float speed, LatLongDetailed currentLocation, List<LatLong> latLongs,
+      List<LatLongDetailed> latLongsDetailed) {
+    return new AutoValue_RouteStats(time, distance, speedMax, speedMin, speedAverage, speed,
+        currentLocation, latLongs, latLongsDetailed);
+  }
+
+  public LatLong getLastLatLong() {
+    return latLongs() != null && !latLongs().isEmpty() ? latLongs().get(latLongs().size() - 1)
+        : LatLong.create(0, 0);
+  }
+
+  public LatLongDetailed getLastLatLongDetailed() {
+    int size = latLongsDetailed().size();
+    return latLongsDetailed() != null && !latLongsDetailed().isEmpty() ? latLongsDetailed().get(
+        size - 1) : LatLongDetailed.create(new Location("Location-" + size));
+  }
+
+  @Override public String toString() {
+    return " time="
+        + time()
+        +
+        " distance="
+        + distance()
+        +
+        " speed="
+        + speed()
+        +
+        " latLong="
+        + "("
+        + currentLocation().location().getLatitude()
+        + ", "
+        + currentLocation().location().getLongitude()
+        + ")";
+  }
 }

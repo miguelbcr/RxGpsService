@@ -19,18 +19,18 @@ package com.miguelbcr.io.rx_gps_service.lib;
 import rx.Observable;
 
 class GetTripSpeedMax {
-    private float speedMax;
-    private float lastSpeed;
+  private float speedMax;
+  private float lastSpeed;
 
-    GetTripSpeedMax() {
-    }
+  GetTripSpeedMax() {
+  }
 
-    void setLastSpeed(float lastSpeed) {
-        this.lastSpeed = lastSpeed;
-    }
+  void setLastSpeed(float lastSpeed) {
+    this.lastSpeed = lastSpeed;
+  }
 
-    Observable<Float> builtObservable() {
-        speedMax = lastSpeed > speedMax ? lastSpeed : speedMax;
-        return Observable.just(speedMax);
-    }
+  Observable<Float> builtObservable() {
+    speedMax = lastSpeed > speedMax ? lastSpeed : speedMax;
+    return Observable.just(speedMax);
+  }
 }

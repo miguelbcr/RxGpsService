@@ -22,110 +22,107 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
-
 import com.miguelbcr.io.rx_gps_service.lib.entities.RouteStats;
 import com.miguelbcr.io.rx_gps_service.lib.entities.RxGpsServiceExtras;
-
 import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.observables.ConnectableObservable;
 
 class NotificationFactory {
-    private Context context;
-    private RxGpsService.Listener listener;
-    private Utilities utilities;
-    private ConnectableObservable<RouteStats> connectableObservable;
-    private RxGpsServiceExtras rxGpsServiceExtras;
-    private NotificationCompat.Builder builderServiceStarted;
-    private NotificationManagerCompat notificationManager;
+  private Context context;
+  private RxGpsService.Listener listener;
+  private Utilities utilities;
+  private ConnectableObservable<RouteStats> connectableObservable;
+  private RxGpsServiceExtras rxGpsServiceExtras;
+  private NotificationCompat.Builder builderServiceStarted;
+  private NotificationManagerCompat notificationManager;
 
-    NotificationFactory(Context context, RxGpsService.Listener listener) {
-        this.context = context;
-        this.listener = listener;
-        utilities = new Utilities();
-        notificationManager = NotificationManagerCompat.from(context);
-        loadNotificationBuilders();
-        loadNotificationExtras();
+  NotificationFactory(Context context, RxGpsService.Listener listener) {
+    this.context = context;
+    this.listener = listener;
+    utilities = new Utilities();
+    notificationManager = NotificationManagerCompat.from(context);
+    loadNotificationBuilders();
+    loadNotificationExtras();
+  }
+
+  private void loadNotificationBuilders() {
+    builderServiceStarted = listener.notificationServiceStarted(context);
+  }
+
+  private void loadNotificationExtras() {
+    Bundle extras = builderServiceStarted.getExtras();
+    rxGpsServiceExtras = RxGpsServiceExtras.createFromBundle(extras);
+  }
+
+  Notification getNotificationServiceStarted(long seconds, long distance) {
+    boolean showGroup = false;
+    NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+    String timeFormatted = utilities.getTimeFormatted(seconds);
+    String distanceFormatted = utilities.getDistanceFormatted(distance);
+
+    if (!TextUtils.isEmpty(rxGpsServiceExtras.bigContentTitle())) {
+      inboxStyle.setBigContentTitle(rxGpsServiceExtras.bigContentTitle());
     }
 
-    private void loadNotificationBuilders() {
-        builderServiceStarted = listener.notificationServiceStarted(context);
+    if (rxGpsServiceExtras.showTime()) {
+      showGroup = true;
+      timeFormatted = TextUtils.isEmpty(rxGpsServiceExtras.timeText()) ? timeFormatted
+          : rxGpsServiceExtras.timeText().replace("%1$s", timeFormatted);
+      inboxStyle.addLine(timeFormatted);
     }
 
-    private void loadNotificationExtras() {
-        Bundle extras = builderServiceStarted.getExtras();
-        rxGpsServiceExtras = RxGpsServiceExtras.createFromBundle(extras);
+    if (rxGpsServiceExtras.showDistance()) {
+      showGroup = true;
+      distanceFormatted = TextUtils.isEmpty(rxGpsServiceExtras.distanceText()) ? distanceFormatted
+          : rxGpsServiceExtras.distanceText().replace("%1$s", distanceFormatted);
+      inboxStyle.addLine(distanceFormatted);
     }
 
-    Notification getNotificationServiceStarted(long seconds, long distance) {
-        boolean showGroup = false;
-        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-        String timeFormatted = utilities.getTimeFormatted(seconds);
-        String distanceFormatted = utilities.getDistanceFormatted(distance);
+    if (showGroup) {
+      builderServiceStarted.setPriority(NotificationCompat.PRIORITY_MAX);
+      builderServiceStarted.setOngoing(true);
+      builderServiceStarted.setAutoCancel(false);
+      builderServiceStarted.setStyle(inboxStyle);
+      builderServiceStarted.setGroupSummary(true);
+      builderServiceStarted.setGroup(rxGpsServiceExtras.notificationGroupServiceStarted());
+    }
 
-        if (!TextUtils.isEmpty(rxGpsServiceExtras.bigContentTitle())) {
-            inboxStyle.setBigContentTitle(rxGpsServiceExtras.bigContentTitle());
+    return builderServiceStarted.build();
+  }
+
+  void onDestroy() {
+    if (connectableObservable != null) {
+      connectableObservable.connect(new Action1<Subscription>() {
+        @Override public void call(Subscription subscription) {
+          subscription.unsubscribe();
         }
-
-        if (rxGpsServiceExtras.showTime()) {
-            showGroup = true;
-            timeFormatted = TextUtils.isEmpty(rxGpsServiceExtras.timeText()) ? timeFormatted
-                    : rxGpsServiceExtras.timeText().replace("%1$s", timeFormatted);
-            inboxStyle.addLine(timeFormatted);
-        }
-
-        if (rxGpsServiceExtras.showDistance()) {
-            showGroup = true;
-            distanceFormatted = TextUtils.isEmpty(rxGpsServiceExtras.distanceText()) ? distanceFormatted
-                    : rxGpsServiceExtras.distanceText().replace("%1$s", distanceFormatted);
-            inboxStyle.addLine(distanceFormatted);
-        }
-
-        if (showGroup) {
-            builderServiceStarted.setPriority(NotificationCompat.PRIORITY_MAX);
-            builderServiceStarted.setOngoing(true);
-            builderServiceStarted.setAutoCancel(false);
-            builderServiceStarted.setStyle(inboxStyle);
-            builderServiceStarted.setGroupSummary(true);
-            builderServiceStarted.setGroup(rxGpsServiceExtras.notificationGroupServiceStarted());
-        }
-
-        return builderServiceStarted.build();
+      });
     }
+  }
 
-    void onDestroy() {
-        if (connectableObservable != null) {
-            connectableObservable.connect(new Action1<Subscription>() {
-                @Override
-                public void call(Subscription subscription) {
-                    subscription.unsubscribe();
-                }
-            });
+  int getNotificationIdServiceStarted() {
+    return rxGpsServiceExtras.notificationIdServiceStarted();
+  }
+
+  void listenForUpdates(Observable<RouteStats> oRouteStats) {
+    if (rxGpsServiceExtras.showTime()) {
+      if (connectableObservable == null) {
+        connectableObservable = oRouteStats.publish();
+        connectableObservable.connect();
+      }
+
+      connectableObservable.subscribe(new Action1<RouteStats>() {
+        @Override public void call(RouteStats routeStats) {
+          notificationManager.notify(rxGpsServiceExtras.notificationIdServiceStarted(),
+              getNotificationServiceStarted(routeStats.time(), routeStats.distance()));
         }
-    }
-
-    int getNotificationIdServiceStarted() {
-        return rxGpsServiceExtras.notificationIdServiceStarted();
-    }
-
-    void listenForUpdates(Observable<RouteStats> oRouteStats) {
-        if (rxGpsServiceExtras.showTime()) {
-            if (connectableObservable == null) {
-                connectableObservable = oRouteStats.publish();
-                connectableObservable.connect();
-            }
-
-            connectableObservable.subscribe(new Action1<RouteStats>() {
-                @Override public void call(RouteStats routeStats) {
-                    notificationManager.notify(rxGpsServiceExtras.notificationIdServiceStarted(),
-                        getNotificationServiceStarted(routeStats.time(), routeStats.distance()));
-                }
-            }, new Action1<Throwable>() {
-                @Override public void call(Throwable throwable) {
-                    // nothing
-                }
-            });
+      }, new Action1<Throwable>() {
+        @Override public void call(Throwable throwable) {
+          // nothing
         }
+      });
     }
+  }
 }

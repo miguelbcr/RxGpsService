@@ -17,19 +17,18 @@
 package com.miguelbcr.io.rx_gps_service.lib.entities;
 
 import android.location.Location;
-
 import com.google.auto.value.AutoValue;
 
-@AutoValue
-public abstract class LatLongDetailed {
-    public abstract Location location();
-    public abstract boolean isCheckPoint();
+@AutoValue public abstract class LatLongDetailed {
+  public abstract Location location();
 
-    public static LatLongDetailed create(Location location) {
-        return create(location, false);
-    }
+  public abstract boolean isCheckPoint();
 
-    public static LatLongDetailed create(Location location, boolean isCheckPoint) {
-        return new AutoValue_LatLongDetailed(location, isCheckPoint);
-    }
+  public static LatLongDetailed create(Location location) {
+    return create(location, false);
+  }
+
+  public static LatLongDetailed create(Location location, boolean isCheckPoint) {
+    return new AutoValue_LatLongDetailed(location, isCheckPoint);
+  }
 }

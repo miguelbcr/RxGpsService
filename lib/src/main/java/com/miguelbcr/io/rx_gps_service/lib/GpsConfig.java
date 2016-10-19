@@ -17,105 +17,104 @@
 package com.miguelbcr.io.rx_gps_service.lib;
 
 import android.app.Activity;
-
 import com.google.android.gms.location.LocationRequest;
 
 class GpsConfig {
-    private Activity activity;
-    private boolean debugMode, detailedWaypoints;
-    private int stageDistance, minDistanceTraveled;
-    private float speedMinModeAuto, discardSpeedsAbove;
-    private int priority, interval, fastestInterval;
+  private Activity activity;
+  private boolean debugMode, detailedWaypoints;
+  private int stageDistance, minDistanceTraveled;
+  private float speedMinModeAuto, discardSpeedsAbove;
+  private int priority, interval, fastestInterval;
 
-    GpsConfig(Activity activity) {
-        this.activity = activity;
-        this.debugMode = false;
-        this.stageDistance = 0;
-        this.minDistanceTraveled = 10;
-        this.speedMinModeAuto = 5 / 3.6f;
-        this.discardSpeedsAbove = 150 / 3.6f;
-        this.priority = LocationRequest.PRIORITY_HIGH_ACCURACY;
-        this.interval = 10000;
-        this.fastestInterval = 5000;
-    }
+  GpsConfig(Activity activity) {
+    this.activity = activity;
+    this.debugMode = false;
+    this.stageDistance = 0;
+    this.minDistanceTraveled = 10;
+    this.speedMinModeAuto = 5 / 3.6f;
+    this.discardSpeedsAbove = 150 / 3.6f;
+    this.priority = LocationRequest.PRIORITY_HIGH_ACCURACY;
+    this.interval = 10000;
+    this.fastestInterval = 5000;
+  }
 
-    public Activity getActivity() {
-        return activity;
-    }
+  Activity getActivity() {
+    return activity;
+  }
 
-    public void setActivity(Activity activity) {
-        this.activity = activity;
-    }
+  void setActivity(Activity activity) {
+    this.activity = activity;
+  }
 
-    public boolean isDebugMode() {
-        return debugMode;
-    }
+  boolean isDebugMode() {
+    return debugMode;
+  }
 
-    public void setDebugMode(boolean debugMode) {
-        this.debugMode = debugMode;
-    }
+  void setDebugMode(boolean debugMode) {
+    this.debugMode = debugMode;
+  }
 
-    public boolean isDetailedWaypoints() {
-        return detailedWaypoints;
-    }
+  boolean isDetailedWaypoints() {
+    return detailedWaypoints;
+  }
 
-    public void setDetailedWaypoints(boolean detailedWaypoints) {
-        this.detailedWaypoints = detailedWaypoints;
-    }
+  void setDetailedWaypoints(boolean detailedWaypoints) {
+    this.detailedWaypoints = detailedWaypoints;
+  }
 
-    public int getStageDistance() {
-        return stageDistance;
-    }
+  int getStageDistance() {
+    return stageDistance;
+  }
 
-    public void setStageDistance(int stageDistance) {
-        this.stageDistance = stageDistance;
-    }
+  void setStageDistance(int stageDistance) {
+    this.stageDistance = stageDistance;
+  }
 
-    public int getMinDistanceTraveled() {
-        return minDistanceTraveled;
-    }
+  int getMinDistanceTraveled() {
+    return minDistanceTraveled;
+  }
 
-    public void setMinDistanceTraveled(int minDistanceTraveled) {
-        this.minDistanceTraveled = minDistanceTraveled;
-    }
+  void setMinDistanceTraveled(int minDistanceTraveled) {
+    this.minDistanceTraveled = minDistanceTraveled;
+  }
 
-    public float getSpeedMinModeAuto() {
-        return speedMinModeAuto;
-    }
+  float getSpeedMinModeAuto() {
+    return speedMinModeAuto;
+  }
 
-    public void setSpeedMinModeAuto(float speedMinModeAuto) {
-        this.speedMinModeAuto = speedMinModeAuto;
-    }
+  void setSpeedMinModeAuto(float speedMinModeAuto) {
+    this.speedMinModeAuto = speedMinModeAuto;
+  }
 
-    public float getDiscardSpeedsAbove() {
-        return discardSpeedsAbove;
-    }
+  float getDiscardSpeedsAbove() {
+    return discardSpeedsAbove;
+  }
 
-    public void setDiscardSpeedsAbove(float discardSpeedsAbove) {
-        this.discardSpeedsAbove = discardSpeedsAbove;
-    }
+  void setDiscardSpeedsAbove(float discardSpeedsAbove) {
+    this.discardSpeedsAbove = discardSpeedsAbove;
+  }
 
-    public int getPriority() {
-        return priority;
-    }
+  int getPriority() {
+    return priority;
+  }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
+  void setPriority(int priority) {
+    this.priority = priority;
+  }
 
-    public int getInterval() {
-        return interval;
-    }
+  int getInterval() {
+    return interval;
+  }
 
-    public void setInterval(int interval) {
-        this.interval = interval;
-    }
+  void setInterval(int interval) {
+    this.interval = interval;
+  }
 
-    public int getFastestInterval() {
-        return fastestInterval;
-    }
+  int getFastestInterval() {
+    return fastestInterval;
+  }
 
-    public void setFastestInterval(int fastestInterval) {
-        this.fastestInterval = fastestInterval;
-    }
+  void setFastestInterval(int fastestInterval) {
+    this.fastestInterval = fastestInterval;
+  }
 }

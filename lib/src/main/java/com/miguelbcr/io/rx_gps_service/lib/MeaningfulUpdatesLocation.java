@@ -17,46 +17,44 @@
 package com.miguelbcr.io.rx_gps_service.lib;
 
 import android.location.Location;
-
 import com.miguelbcr.io.rx_gps_service.lib.entities.LatLong;
-
 import rx.Observable;
 import rx.functions.Func1;
 
 class MeaningfulUpdatesLocation {
-    private Location previousLocation;
-    private Location currentLocation;
-    private final Utilities utilities;
+  private Location previousLocation;
+  private Location currentLocation;
+  private final Utilities utilities;
 
-    MeaningfulUpdatesLocation() {
-        utilities = new Utilities();
-    }
+  MeaningfulUpdatesLocation() {
+    utilities = new Utilities();
+  }
 
-    void setPreviousLocation(Location previousLocation) {
-        this.previousLocation = previousLocation;
-    }
+  void setPreviousLocation(Location previousLocation) {
+    this.previousLocation = previousLocation;
+  }
 
-    void setCurrentLocation(Location currentLocation) {
-        this.currentLocation = currentLocation;
-    }
+  void setCurrentLocation(Location currentLocation) {
+    this.currentLocation = currentLocation;
+  }
 
-    Location getCurrentLocation() {
-        return currentLocation;
-    }
+  Location getCurrentLocation() {
+    return currentLocation;
+  }
 
-    Observable<Boolean> builtObservable(final int minDistanceTraveled) {
-        if (previousLocation == null)
-            previousLocation = new Location("previousLocation");
+  Observable<Boolean> builtObservable(final int minDistanceTraveled) {
+    if (previousLocation == null) previousLocation = new Location("previousLocation");
 
-        LatLong previousLatLng = LatLong.create(previousLocation.getLatitude(), previousLocation.getLongitude());
-        LatLong currentLatLng = LatLong.create(currentLocation.getLatitude(), currentLocation.getLongitude());
+    LatLong previousLatLng =
+        LatLong.create(previousLocation.getLatitude(), previousLocation.getLongitude());
+    LatLong currentLatLng =
+        LatLong.create(currentLocation.getLatitude(), currentLocation.getLongitude());
 
-        return utilities.getDistanceFromTo(previousLatLng, currentLatLng)
-                .map(new Func1<Float, Boolean>() {
-                    @Override
-                    public Boolean call(Float distance) {
-                        return minDistanceTraveled == 0 || distance >= minDistanceTraveled;
-                    }
-                });
-    }
+    return utilities.getDistanceFromTo(previousLatLng, currentLatLng)
+        .map(new Func1<Float, Boolean>() {
+          @Override public Boolean call(Float distance) {
+            return minDistanceTraveled == 0 || distance >= minDistanceTraveled;
+          }
+        });
+  }
 }

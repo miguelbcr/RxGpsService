@@ -19,24 +19,24 @@ package com.miguelbcr.io.rx_gps_service.lib;
 import rx.Observable;
 
 class GetTripSpeedMin {
-    static final float INITIAL_VALUE = 999999999f;
-    private float speedMin, speedMinTreshold;
-    private float lastSpeed;
+  static final float INITIAL_VALUE = 999999999f;
+  private float speedMin, speedMinTreshold;
+  private float lastSpeed;
 
-    GetTripSpeedMin() {
-        speedMin = INITIAL_VALUE;
-    }
+  GetTripSpeedMin() {
+    speedMin = INITIAL_VALUE;
+  }
 
-    void setSpeedMinTreshold(float speedMinTreshold) {
-        this.speedMinTreshold = speedMinTreshold;
-    }
+  void setSpeedMinTreshold(float speedMinTreshold) {
+    this.speedMinTreshold = speedMinTreshold;
+  }
 
-    void setLastSpeed(float lastSpeed) {
-        this.lastSpeed = lastSpeed;
-    }
+  void setLastSpeed(float lastSpeed) {
+    this.lastSpeed = lastSpeed;
+  }
 
-    Observable<Float> builtObservable() {
-        speedMin = lastSpeed >= speedMinTreshold && lastSpeed < speedMin ? lastSpeed : speedMin;
-        return Observable.just(speedMin);
-    }
+  Observable<Float> builtObservable() {
+    speedMin = lastSpeed >= speedMinTreshold && lastSpeed < speedMin ? lastSpeed : speedMin;
+    return Observable.just(speedMin);
+  }
 }
