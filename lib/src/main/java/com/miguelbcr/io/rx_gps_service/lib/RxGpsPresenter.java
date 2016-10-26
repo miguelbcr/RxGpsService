@@ -168,7 +168,11 @@ class RxGpsPresenter {
         if (permissionState == PERMISSIONS_STATE.DENIED && throwable != null) {
           return Observable.error(throwable);
         }
-        timeElapsed = timeElapsedChrono;
+
+        timeElapsed =
+            timeElapsedChrono < gpsConfig.getFastestInterval() ? gpsConfig.getFastestInterval()
+                : timeElapsedChrono;
+
         if (!isPlaying) timeElapsedBeingOnPause++;
         timeElapsed -= timeElapsedBeingOnPause;
         return Observable.just(timeElapsed);
@@ -232,11 +236,7 @@ class RxGpsPresenter {
         isMeaningfulWaypoint = false;
 
         if (isNavigationModeAuto) {
-          if (speed >= gpsConfig.getSpeedMinModeAuto()) {
-            RxGpsPresenter.this.playChrono();
-          } else {
-            RxGpsPresenter.this.stopChrono();
-          }
+          isPlaying = speed >= gpsConfig.getSpeedMinModeAuto();
         }
 
         return RouteStats.create(timeElapsed, distanceAccumulated, speedMax, speedMin, speedAverage,
