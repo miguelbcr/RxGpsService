@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,24 +15,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.google.android.gms.location.LocationRequest;
-import com.google.gson.Gson;
 import com.miguelbcr.io.rx_gps_service.lib.RxGpsService;
 import com.miguelbcr.io.rx_gps_service.lib.entities.LatLong;
-import com.miguelbcr.io.rx_gps_service.lib.entities.LatLongDetailed;
 import com.miguelbcr.io.rx_gps_service.lib.entities.PermissionDeniedException;
 import com.miguelbcr.io.rx_gps_service.lib.entities.RouteStats;
 import com.miguelbcr.io.rx_gps_service.lib.entities.RxGpsServiceExtras;
 import com.miguelbcr.rx_gpsservice.R;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 public class RouteFragment extends Fragment {
     private static final String TAG = "RouteFragment";
@@ -41,7 +35,7 @@ public class RouteFragment extends Fragment {
     private static final String PREF_IS_PLAYING = "isPlaying";
     private PlaceMapFragment placeMapFragment;
     private ImageView ib_play, ib_stop;
-    private CompositeSubscription subscriptions;
+    private Subscription subscription;
     private LatLong lastLatLong;
     private BitmapHelper bitmapHelper;
     private RouteStatsRepository routeStatsRepository;
@@ -67,7 +61,6 @@ public class RouteFragment extends Fragment {
     }
 
     private void init() {
-        subscriptions = new CompositeSubscription();
         bitmapHelper = new BitmapHelper();
         routeStatsRepository = new RouteStatsRepository(((BaseApp) getActivity().getApplication()).getReactiveCache());
 
@@ -214,16 +207,12 @@ public class RouteFragment extends Fragment {
 
     private void stopListenForLocationUpdates() {
         stopChrono();
-
-        if (subscriptions != null) {
-            subscriptions.clear();
-        }
+        unsubscribe();
     }
 
     private void startListenForLocationUpdates() {
         if (RxGpsService.isServiceStarted()) {
-            subscriptions = new CompositeSubscription();
-            subscriptions.add(RxGpsService.instance().onRouteStatsUpdates()
+            subscription = RxGpsService.instance().onRouteStatsUpdates()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<RouteStats>() {
@@ -245,7 +234,7 @@ public class RouteFragment extends Fragment {
                                 Toast.makeText(getContext(), R.string.permissions_required, Toast.LENGTH_SHORT).show();
                             }
                         }
-                    }));
+                    });
         }
     }
 
@@ -261,9 +250,9 @@ public class RouteFragment extends Fragment {
     }
 
     private void unsubscribe() {
-        if (subscriptions != null) {
-            subscriptions.unsubscribe();
-            subscriptions = null;
+        if (subscription != null) {
+            subscription.unsubscribe();
+            subscription = null;
         }
     }
 }

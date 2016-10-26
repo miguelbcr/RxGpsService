@@ -21,6 +21,7 @@ import com.google.auto.value.AutoValue;
 import java.util.List;
 
 @AutoValue public abstract class RouteStats {
+
   public abstract long time();
 
   public abstract long distance();
@@ -60,18 +61,20 @@ import java.util.List;
   @Override public String toString() {
     return " time="
         + time()
-        +
-        " distance="
+        + " distance="
         + distance()
-        +
-        " speed="
+        + " speed="
         + speed()
-        +
-        " latLong="
+        + " latLong="
         + "("
         + currentLocation().location().getLatitude()
         + ", "
         + currentLocation().location().getLongitude()
-        + ")";
+        + ") checkpoint="
+        + currentLocation().isCheckPoint()
+        + " waypoints="
+        + (latLongs() != null && !latLongs().isEmpty() ? latLongs().size()
+        : latLongsDetailed() != null && !latLongsDetailed().isEmpty() ? latLongsDetailed().size()
+            : 0);
   }
 }

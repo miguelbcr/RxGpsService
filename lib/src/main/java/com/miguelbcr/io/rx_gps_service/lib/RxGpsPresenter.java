@@ -49,8 +49,8 @@ class RxGpsPresenter {
   private List<LatLongDetailed> latLongsDetailed;
   private long timeElapsed, lastTimeElapsed, timeElapsedBeingOnPause, timeLastLocation,
       distanceAccumulated, nextStageDistanceGoal;
-  private boolean isMeaningWaypoint, stageDistanceReached, isNavigationModeAuto;
-  private Location lastMeaningLocation, lastLocation;
+  private boolean isMeaningfulWaypoint, stageDistanceReached, isNavigationModeAuto;
+  private Location lastMeaningfulLocation, lastLocation;
   private float speed, speedAverage, speedMax, speedMin;
   private boolean isPlaying;
 
@@ -75,9 +75,9 @@ class RxGpsPresenter {
     this.latLongsDetailed = new ArrayList<>();
     this.distanceAccumulated = 0;
     this.nextStageDistanceGoal = gpsConfig.getStageDistance();
-    this.isMeaningWaypoint = false;
+    this.isMeaningfulWaypoint = false;
     this.stageDistanceReached = false;
-    this.lastMeaningLocation = new Location("lastMeaningLocation");
+    this.lastMeaningfulLocation = new Location("lastMeaningfulLocation");
     this.lastLocation = new Location("lastLocation");
     this.permissionState = PERMISSIONS_STATE.WAITING;
   }
@@ -123,7 +123,7 @@ class RxGpsPresenter {
             RxGpsPresenter.this.speed = speed;
 
             // Force to draw your position the first time
-            if (isEmpty(lastMeaningLocation)) {
+            if (isEmpty(lastMeaningfulLocation)) {
               return Observable.just(true);
             }
 
@@ -135,16 +135,16 @@ class RxGpsPresenter {
               }
             } else if (!isPlaying) return Observable.just(false);
 
-            meaningfulUpdatesLocation.setPreviousLocation(lastMeaningLocation);
+            meaningfulUpdatesLocation.setPreviousLocation(lastMeaningfulLocation);
             return meaningfulUpdatesLocation.builtObservable(gpsConfig.getMinDistanceTraveled());
           }
         })
         .subscribe(new Action1<Boolean>() {
-          @Override public void call(Boolean isMeaning) {
-            if (isMeaning) {
-              lastMeaningLocation = meaningfulUpdatesLocation.getCurrentLocation();
-              addWaypoint(lastMeaningLocation, false);
-              isMeaningWaypoint = true;
+          @Override public void call(Boolean isMeaningful) {
+            if (isMeaningful) {
+              lastMeaningfulLocation = meaningfulUpdatesLocation.getCurrentLocation();
+              addWaypoint(lastMeaningfulLocation, false);
+              isMeaningfulWaypoint = true;
             }
           }
         }, new Action1<Throwable>() {
@@ -154,13 +154,13 @@ class RxGpsPresenter {
           }
         }));
 
-    connectableObservable = getMeaningObservableRouteStats(recordTime.builtObservable()).publish();
+    connectableObservable = getMeaningfulObservableRouteStats(recordTime.builtObservable()).publish();
     connectableObservable.connect();
 
     view.updatesRouteStats(connectableObservable);
   }
 
-  private Observable<RouteStats> getMeaningObservableRouteStats(Observable<Long> oRecordTime) {
+  private Observable<RouteStats> getMeaningfulObservableRouteStats(Observable<Long> oRecordTime) {
     // Creates an observable with the info to be displayed on fragment which is subscribed to it.
     // Will be updated each time step
     return oRecordTime.concatMap(new Func1<Long, Observable<Long>>() {
@@ -175,7 +175,7 @@ class RxGpsPresenter {
       }
     }).concatMap(new Func1<Long, Observable<Long>>() {
       @Override public Observable<Long> call(Long timeElapsed) {
-        if (!isMeaningWaypoint) return Observable.just(distanceAccumulated);
+        if (!isMeaningfulWaypoint) return Observable.just(distanceAccumulated);
         if (isWaypointsEmpty() || hasOnlyOneWaypoint()) return Observable.just(distanceAccumulated);
 
         getTripDistance.setParams(distanceAccumulated, getLatLongBeforeLast(), getLastLatLong());
@@ -183,7 +183,7 @@ class RxGpsPresenter {
       }
     }).concatMap(new Func1<Long, Observable<Float>>() {
       @Override public Observable<Float> call(Long distance) {
-        if (!isMeaningWaypoint) return Observable.just(speed);
+        if (!isMeaningfulWaypoint) return Observable.just(speed);
         distanceAccumulated = getTripDistance.getDistanceAccumulated();
         lastTimeElapsed = timeElapsed - lastTimeElapsed;
         getTripSpeed.setParams(getTripDistance.getLastDistance(), lastTimeElapsed,
@@ -193,7 +193,7 @@ class RxGpsPresenter {
       }
     }).concatMap(new Func1<Float, Observable<Float>>() {
       @Override public Observable<Float> call(Float speed) {
-        if (!isMeaningWaypoint) return Observable.just(speedAverage);
+        if (!isMeaningfulWaypoint) return Observable.just(speedAverage);
         RxGpsPresenter.this.speed = speed;
 
         getTripSpeedAverage.setParams(distanceAccumulated, timeElapsed);
@@ -201,7 +201,7 @@ class RxGpsPresenter {
       }
     }).concatMap(new Func1<Float, Observable<Float>>() {
       @Override public Observable<Float> call(Float speedAverage) {
-        if (!isMeaningWaypoint) return Observable.just(speedMax);
+        if (!isMeaningfulWaypoint) return Observable.just(speedMax);
         RxGpsPresenter.this.speedAverage = speedAverage;
 
         getTripSpeedMax.setLastSpeed(getTripSpeed.getSpeed());
@@ -209,7 +209,7 @@ class RxGpsPresenter {
       }
     }).concatMap(new Func1<Float, Observable<Float>>() {
       @Override public Observable<Float> call(Float speedMax) {
-        if (!isMeaningWaypoint) return Observable.just(speedMin);
+        if (!isMeaningfulWaypoint) return Observable.just(speedMin);
         RxGpsPresenter.this.speedMax = speedMax;
 
         getTripSpeedMin.setSpeedMinTreshold(gpsConfig.getSpeedMinModeAuto());
@@ -225,11 +225,11 @@ class RxGpsPresenter {
         if (isStageDistanceGoalReached() && !isWaypointsEmpty()) {
           isStageDistanceGoalReached = true;
           resetFlagStageDistanceReached();
-          replaceLastWaypoint(lastMeaningLocation, true);
+          replaceLastWaypoint(lastMeaningfulLocation, true);
         }
 
-        printLog(lastMeaningLocation);
-        isMeaningWaypoint = false;
+        printLog(lastMeaningfulLocation);
+        isMeaningfulWaypoint = false;
 
         if (isNavigationModeAuto) {
           if (speed >= gpsConfig.getSpeedMinModeAuto()) {
@@ -240,7 +240,7 @@ class RxGpsPresenter {
         }
 
         return RouteStats.create(timeElapsed, distanceAccumulated, speedMax, speedMin, speedAverage,
-            speed, LatLongDetailed.create(lastMeaningLocation, isStageDistanceGoalReached),
+            speed, LatLongDetailed.create(lastMeaningfulLocation, isStageDistanceGoalReached),
             latLongs, latLongsDetailed);
       }
     });

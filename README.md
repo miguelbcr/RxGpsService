@@ -146,7 +146,7 @@ In order to get the latest updated [RouteStats](https://github.com/miguelbcr/RxG
 
 ```java
 public class RouteFragment extends Fragment {
-    private CompositeSubscription subscriptions;
+    private Subscription subscription;
     ....
 
     @Override public void onDestroy() {
@@ -155,17 +155,16 @@ public class RouteFragment extends Fragment {
     }
 
     private void unsubscribe() {
-        if (subscriptions != null) {
-            subscriptions.clear();
-            subscriptions = null;
+        if (subscription != null) {
+            subscription.unsubscribe();
+            subscription = null;
         }
     }
 
     private void startListenForLocationUpdates() {
         if (RxGpsService.isServiceStarted()) {
             unsubscribe()
-            subscriptions = new CompositeSubscription();
-            subscriptions.add(RxGpsService.instance().onRouteStatsUpdates()
+            subscription = RxGpsService.instance().onRouteStatsUpdates()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<RouteStats>() {
@@ -179,7 +178,7 @@ public class RouteFragment extends Fragment {
                             RxGpsService.stopService(getContext());
                             unsubscribe();
                         }
-                    }));
+                    });
         }
     }
 
