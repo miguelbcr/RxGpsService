@@ -113,6 +113,7 @@ class RxGpsPresenter {
             if (timeLastLocation == 0) timeLastLocation = currentTime;
             timeLastLocation = currentTime - timeLastLocation;
             getTripSpeed.setParams(distance.longValue(), timeLastLocation,
+                gpsConfig.getFastestInterval() / 1000,
                 gpsConfig.getDiscardSpeedsAbove());
             timeLastLocation = currentTime;
             return getTripSpeed.builtObservable();
@@ -168,11 +169,7 @@ class RxGpsPresenter {
         if (permissionState == PERMISSIONS_STATE.DENIED && throwable != null) {
           return Observable.error(throwable);
         }
-
-        timeElapsed =
-            timeElapsedChrono < gpsConfig.getFastestInterval() ? gpsConfig.getFastestInterval()
-                : timeElapsedChrono;
-
+        timeElapsed = timeElapsedChrono;
         if (!isPlaying) timeElapsedBeingOnPause++;
         timeElapsed -= timeElapsedBeingOnPause;
         return Observable.just(timeElapsed);
@@ -191,6 +188,7 @@ class RxGpsPresenter {
         distanceAccumulated = getTripDistance.getDistanceAccumulated();
         lastTimeElapsed = timeElapsed - lastTimeElapsed;
         getTripSpeed.setParams(getTripDistance.getLastDistance(), lastTimeElapsed,
+            gpsConfig.getFastestInterval() / 1000,
             gpsConfig.getDiscardSpeedsAbove());
         lastTimeElapsed = timeElapsed;
         return getTripSpeed.builtObservable();

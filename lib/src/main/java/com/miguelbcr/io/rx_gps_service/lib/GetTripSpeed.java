@@ -26,9 +26,9 @@ class GetTripSpeed {
   GetTripSpeed() {
   }
 
-  void setParams(long distance, long time, float discardSpeedsAbove) {
+  void setParams(long distance, long time, long fastestInterval, float discardSpeedsAbove) {
     this.distance = distance;
-    this.time = time;
+    this.time = time < fastestInterval ? fastestInterval : time;
     this.discardSpeedsAbove = discardSpeedsAbove;
   }
 
