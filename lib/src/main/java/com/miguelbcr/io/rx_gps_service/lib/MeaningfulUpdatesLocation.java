@@ -25,6 +25,7 @@ class MeaningfulUpdatesLocation {
   private Location previousLocation;
   private Location currentLocation;
   private final Utilities utilities;
+  private long lastMeaningfulDistance;
 
   MeaningfulUpdatesLocation() {
     utilities = new Utilities();
@@ -42,6 +43,10 @@ class MeaningfulUpdatesLocation {
     return currentLocation;
   }
 
+  long getLastMeaningfulDistance() {
+    return lastMeaningfulDistance;
+  }
+
   Observable<Boolean> builtObservable(final int minDistanceTraveled) {
     if (previousLocation == null) previousLocation = new Location("previousLocation");
 
@@ -53,7 +58,13 @@ class MeaningfulUpdatesLocation {
     return utilities.getDistanceFromTo(previousLatLng, currentLatLng)
         .map(new Func1<Float, Boolean>() {
           @Override public Boolean call(Float distance) {
-            return minDistanceTraveled == 0 || distance >= minDistanceTraveled;
+            boolean isMeaningful = minDistanceTraveled == 0 || distance >= minDistanceTraveled;
+
+            if (isMeaningful) {
+              lastMeaningfulDistance = Math.round(distance);
+            }
+
+            return isMeaningful;
           }
         });
   }
