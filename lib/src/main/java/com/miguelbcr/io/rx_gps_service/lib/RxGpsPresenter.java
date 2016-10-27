@@ -112,7 +112,7 @@ class RxGpsPresenter {
             long currentTime = System.currentTimeMillis() / 1000;
             if (timeLastLocation == 0) timeLastLocation = currentTime;
             timeLastLocation = currentTime - timeLastLocation;
-            getTripSpeed.setParams(distance.longValue(), timeLastLocation,
+            getTripSpeed.setParams(Math.round(distance), timeLastLocation,
                 gpsConfig.getFastestInterval() / 1000,
                 gpsConfig.getDiscardSpeedsAbove());
             timeLastLocation = currentTime;
@@ -176,8 +176,9 @@ class RxGpsPresenter {
       }
     }).concatMap(new Func1<Long, Observable<Long>>() {
       @Override public Observable<Long> call(Long timeElapsed) {
-        if (!isMeaningfulWaypoint) return Observable.just(distanceAccumulated);
-        if (isWaypointsEmpty() || hasOnlyOneWaypoint()) return Observable.just(distanceAccumulated);
+        if (!isMeaningfulWaypoint || isWaypointsEmpty() || hasOnlyOneWaypoint()) {
+          return Observable.just(meaningfulUpdatesLocation.getLastMeaningfulDistance());
+        }
 
         getTripDistance.setParams(distanceAccumulated, getLatLongBeforeLast(), getLastLatLong());
         return getTripDistance.builtObservable();
@@ -187,7 +188,7 @@ class RxGpsPresenter {
         if (!isMeaningfulWaypoint) return Observable.just(speed);
         distanceAccumulated = getTripDistance.getDistanceAccumulated();
         lastTimeElapsed = timeElapsed - lastTimeElapsed;
-        getTripSpeed.setParams(getTripDistance.getLastDistance(), lastTimeElapsed,
+        getTripSpeed.setParams(distance, lastTimeElapsed,
             gpsConfig.getFastestInterval() / 1000,
             gpsConfig.getDiscardSpeedsAbove());
         lastTimeElapsed = timeElapsed;
@@ -357,7 +358,7 @@ class RxGpsPresenter {
       Log.d(TAG, "timeElapsed=" + timeElapsed +
           " lastTimeElapsed=" + getTripSpeed.getLastTimeElapsed() +
           " distance=" + distanceAccumulated +
-          " lastDistance=" + getTripDistance.getLastDistance() +
+          " lastDistance=" + meaningfulUpdatesLocation.getLastMeaningfulDistance() +
           " speed=" + speed +
           " speedAverage=" + speedAverage +
           " speedMax=" + speedMax +

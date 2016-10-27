@@ -22,7 +22,6 @@ import rx.functions.Func1;
 
 class GetTripDistance {
   private long distanceAccumulated;
-  private long lastDistance;
   private LatLong previousLatLong;
   private LatLong currentLatLong;
   private final Utilities utilities;
@@ -41,17 +40,13 @@ class GetTripDistance {
     return distanceAccumulated;
   }
 
-  long getLastDistance() {
-    return lastDistance;
-  }
-
   Observable<Long> builtObservable() {
     return utilities.getDistanceFromTo(previousLatLong, currentLatLong)
         .concatMap(new Func1<Float, Observable<? extends Long>>() {
-          @Override public Observable<? extends Long> call(Float lastDistance) {
-            GetTripDistance.this.lastDistance = lastDistance.longValue();
-            distanceAccumulated += lastDistance.intValue();
-            return Observable.just(distanceAccumulated);
+          @Override public Observable<? extends Long> call(Float distance) {
+            long lastDistance = Math.round(distance);
+            distanceAccumulated += lastDistance;
+            return Observable.just(lastDistance);
           }
         });
   }
