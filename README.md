@@ -30,7 +30,7 @@ allprojects {
 And add next dependencies in the build.gradle of the module:
 ```gradle
 dependencies {
-    compile "com.github.miguelbcr:RxGpsService:0.0.8"
+    compile "com.github.miguelbcr:RxGpsService:0.0.9"
     compile "io.reactivex:rxjava:1.1.10"
 }
 ```
