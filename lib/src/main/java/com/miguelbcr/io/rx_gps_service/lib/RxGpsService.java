@@ -85,7 +85,7 @@ public class RxGpsService extends Service implements RxGpsServiceView {
 
     listener.onServiceAlreadyStarted();
 
-    return Service.START_STICKY;
+    return Service.START_NOT_STICKY;
   }
 
   @Override public void onDestroy() {
